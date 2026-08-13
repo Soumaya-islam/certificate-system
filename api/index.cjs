@@ -1,27 +1,15 @@
 // Simple API that always works - no database needed
-module.exports = (req, res) => {
-    // Enable CORS
+export default function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    // Handle OPTIONS request
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
 
-    // Log the request
     console.log('📨 Request:', req.method, req.url);
 
-    // Root route
-    if (req.url === '/' || req.url === '') {
-        return res.status(200).json({
-            status: 'ok',
-            message: 'Up Skills Hub API is running!'
-        });
-    }
-
-    // Health check
     if (req.url === '/api/health') {
         return res.status(200).json({
             status: 'ok',
@@ -30,7 +18,6 @@ module.exports = (req, res) => {
         });
     }
 
-    // Certificates API
     if (req.url === '/api/certificates') {
         return res.status(200).json({
             success: true,
@@ -39,8 +26,7 @@ module.exports = (req, res) => {
         });
     }
 
-    // Frontend - serve index.html
-    if (req.url === '/index.html' || req.url === '/') {
+    if (req.url === '/' || req.url === '' || req.url === '/index.html') {
         return res.status(200).send(`
             <!DOCTYPE html>
             <html>
@@ -70,9 +56,8 @@ module.exports = (req, res) => {
         `);
     }
 
-    // 404 for anything else
     return res.status(404).json({
         error: 'Not Found',
         message: 'Endpoint not found: ' + req.url
     });
-};
+}
