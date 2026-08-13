@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Up Skills Hub – Certificate Module</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        /* Reset & base */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f6f8fc;
+            color: #1e293b;
+            padding: 24px;
+            line-height:1.6;
+        }
+        .container { max-width:1280px; margin:0 auto; }
+        /* Navigation */
+        nav { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:24px; background:#fff; padding:12px 20px; border-radius:14px; box-shadow:0 1px 4px rgba(0,0,0,0.04); }
+        nav button { background:transparent; border:none; padding:8px 20px; border-radius:8px; font-weight:600; font-size:0.95rem; cursor:pointer; transition:0.2s; }
+        nav button:hover { background:#eef2f6; }
+        nav button.active { background:#1e293b; color:#fff; }
+        /* Cards & Grid */
+        .grid-3 { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:20px; }
+        .card { background:#fff; border-radius:16px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
+        .badge { display:inline-block; padding:4px 12px; border-radius:999px; font-size:0.75rem; font-weight:600; }
+        .badge-valid { background:#dcfce7; color:#166534; }
+        .badge-revoked { background:#fee2e2; color:#991b1b; }
+        .badge-pending { background:#fef9c3; color:#854d0e; }
+        .btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:8px; border:none; font-weight:600; font-size:0.85rem; cursor:pointer; transition:0.2s; background:#eef2f6; }
+        .btn-primary { background:#1e293b; color:#fff; }
+        .btn-primary:hover { background:#0f172a; }
+        .btn-blue { background:#3b82f6; color:#fff; }
+        .btn-blue:hover { background:#2563eb; }
+        .btn-red { background:#ef4444; color:#fff; }
+        .btn-red:hover { background:#dc2626; }
+        .btn-outline { background:transparent; border:1px solid #d1d9e6; }
+        .btn-sm { padding:4px 12px; font-size:0.75rem; }
+        .flex { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .flex-between { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+        .mt-4 { margin-top:16px; }
+        .mb-4 { margin-bottom:16px; }
+        .text-muted { color:#64748b; }
+        .table-wrap { overflow-x:auto; border-radius:12px; border:1px solid #e9edf4; }
+        table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+        th { background:#f8fafc; padding:12px 16px; text-align:left; font-weight:600; border-bottom:1px solid #e9edf4; }
+        td { padding:12px 16px; border-bottom:1px solid #f1f5f9; }
+        tr:last-child td { border-bottom:none; }
+        /* Modal */
+        .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:999; padding:20px; }
+        .modal-overlay.active { display:flex; }
+        .modal { background:#fff; border-radius:20px; max-width:500px; width:100%; padding:32px; max-height:90vh; overflow-y:auto; }
+        .modal h3 { margin-bottom:16px; }
+        .modal .close { float:right; background:none; border:none; font-size:1.5rem; cursor:pointer; }
+        .modal input, .modal select { width:100%; padding:10px 14px; border:1px solid #d1d9e6; border-radius:10px; margin-bottom:12px; }
+        .modal label { font-weight:500; display:block; margin-bottom:4px; }
+        /* Verify box */
+        .verify-box { max-width:520px; margin:40px auto; background:#fff; padding:32px; border-radius:20px; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.06); }
+        .verify-box .input-group { display:flex; gap:8px; }
+        .verify-box input { flex:1; padding:10px 14px; border:1px solid #d1d9e6; border-radius:10px; }
+        .result-card { background:#f8fafc; border-radius:12px; padding:16px; margin-top:16px; text-align:left; }
+        .result-card .row { display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #e9edf4; }
+        .result-card .row:last-child { border-bottom:none; }
+        .spinner { display:inline-block; width:20px; height:20px; border:2px solid #e9edf4; border-top-color:#3b82f6; border-radius:50%; animation:spin 0.6s linear infinite; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+        .hidden { display:none !important; }
+        .text-center { text-align:center; }
+        /* Responsive */
+        @media (max-width:768px) {
+            .grid-3 { grid-template-columns:1fr; }
+            .flex-between { flex-direction:column; align-items:stretch; }
+            .verify-box .input-group { flex-direction:column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav>
+            <button class="active" data-view="student"><i class="fas fa-graduation-cap"></i> My Certificates</button>
+            <button data-view="admin"><i class="fas fa-shield-alt"></i> Admin</button>
+            <button data-view="verify"><i class="fas fa-check-circle"></i> Verify</button>
+        </nav>
+
+        <!-- ======= STUDENT VIEW ======= -->
+        <div id="view-student">
+            <div class="flex-between mb-4">
+                <h2><i class="fas fa-certificate" style="color:#3b82f6;"></i> My Certificates</h2>
+                <span class="text-muted" id="cert-count">Loading...</span>
+            </div>
+            <div class="grid-3" id="student-grid"></div>
+        </div>
+
+        <!-- ======= ADMIN VIEW ======= -->
+        <div id="view-admin" class="hidden">
+            <div class="flex-between mb-4">
+                <h2><i class="fas fa-shield-alt" style="color:#3b82f6;"></i> Admin Panel</h2>
+                <button class="btn btn-primary" id="btn-generate"><i class="fas fa-plus"></i> Generate</button>
+            </div>
+            <!-- Filter/Search -->
+            <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+                <input type="text" id="admin-search" placeholder="Search by name, course, number..." style="flex:1; padding:8px 14px; border:1px solid #d1d9e6; border-radius:10px;" />
+                <select id="admin-status-filter" style="padding:8px 14px; border:1px solid #d1d9e6; border-radius:10px;">
+                    <option value="">All status</option>
+                    <option value="valid">Valid</option>
+                    <option value="revoked">Revoked</option>
+                    <option value="pending">Pending</option>
+                </select>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>#</th><th>Number</th><th>Student</th><th>Course</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody id="admin-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ======= VERIFY VIEW WITH QR SCANNER ======= -->
+        <div id="view-verify" class="hidden">
+            <div class="verify-box">
+                <i class="fas fa-qrcode" style="font-size:3rem; color:#3b82f6;"></i>
+                <h2>Verify Certificate</h2>
+                <p class="text-muted">Enter certificate number or scan QR code</p>
+                
+                <div class="input-group">
+                    <input type="text" id="verify-input" placeholder="e.g. USH-2026-FD-000001" />
+                    <button class="btn btn-primary" id="verify-btn"><i class="fas fa-search"></i> Verify</button>
+                </div>
+
+                <div style="margin-top:20px; border-top:1px solid #e9edf4; padding-top:20px;">
+                    <button class="btn btn-outline" id="qr-scan-btn"><i class="fas fa-camera"></i> Scan QR Code</button>
+                    <div id="qr-reader" style="margin-top:12px; max-width:300px; margin-left:auto; margin-right:auto; display:none;"></div>
+                </div>
+
+                <div id="verify-result" style="margin-top:16px;"></div>
+            </div>
+        </div>
+
+        <!-- ======= GENERATE MODAL ======= -->
+        <div class="modal-overlay" id="generate-modal">
+            <div class="modal">
+                <button class="close" id="modal-close">&times;</button>
+                <h3>Generate Certificate</h3>
+                <form id="generate-form">
+                    <label>Student Name</label>
+                    <input type="text" id="gen-name" required placeholder="Full name" />
+                    <label>Course Name</label>
+                    <input type="text" id="gen-course" required placeholder="Course title" />
+                    <label>Course Code (e.g., FD)</label>
+                    <input type="text" id="gen-code" required placeholder="e.g. FD" maxlength="5" />
+                    <button type="submit" class="btn btn-primary" style="width:100%;">Generate</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ======= DETAILS MODAL ======= -->
+        <div class="modal-overlay" id="details-modal">
+            <div class="modal">
+                <button class="close" id="details-close">&times;</button>
+                <h3 id="details-title">Certificate Details</h3>
+                <div id="details-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ---------- API base URL ----------
+        const API_BASE = 'http://localhost:5000/api';
+
+        // ---------- DOM refs ----------
+        const studentGrid = document.getElementById('student-grid');
+        const certCount = document.getElementById('cert-count');
+        const adminBody = document.getElementById('admin-table-body');
+        const adminSearch = document.getElementById('admin-search');
+        const adminStatus = document.getElementById('admin-status-filter');
+        const verifyInput = document.getElementById('verify-input');
+        const verifyBtn = document.getElementById('verify-btn');
+        const verifyResult = document.getElementById('verify-result');
+
+        // Modals
+        const genModal = document.getElementById('generate-modal');
+        const genForm = document.getElementById('generate-form');
+        const detailsModal = document.getElementById('details-modal');
+
+        // Navigation
+        document.querySelectorAll('nav button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const view = btn.dataset.view;
+                document.getElementById('view-student').classList.toggle('hidden', view !== 'student');
+                document.getElementById('view-admin').classList.toggle('hidden', view !== 'admin');
+                document.getElementById('view-verify').classList.toggle('hidden', view !== 'verify');
+                if (view === 'student') loadStudentCerts();
+                if (view === 'admin') loadAdminCerts();
+            });
+        });
+
+        // ---------- Load Student Certificates ----------
+        async function loadStudentCerts() {
+            try {
+                const res = await fetch(`${API_BASE}/certificates`);
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error);
+                const certs = data.certificates;
+                certCount.textContent = `${certs.length} certificates`;
+                if (certs.length === 0) {
+                    studentGrid.innerHTML = `<div class="text-muted text-center" style="padding:40px;"><i class="fas fa-certificate" style="font-size:2rem;display:block;margin-bottom:12px;"></i> No certificates found</div>`;
+                    return;
+                }
+                studentGrid.innerHTML = certs.map(c => `
+                    <div class="card">
+                        <div class="flex" style="justify-content:space-between;">
+                            <span class="badge badge-${c.status}">${c.status}</span>
+                            <span class="text-muted" style="font-size:0.75rem;">${c.certificateNumber}</span>
+                        </div>
+                        <div style="margin-top:8px;">
+                            <div style="font-weight:600; font-size:1.1rem;">${c.studentName}</div>
+                            <div class="text-muted">${c.courseName}</div>
+                            <div class="text-muted" style="font-size:0.8rem;">Issued: ${new Date(c.issueDate).toLocaleDateString()}</div>
+                        </div>
+                        <div class="flex" style="margin-top:12px; gap:6px; flex-wrap:wrap;">
+                            <button class="btn btn-outline btn-sm" onclick="downloadCert('${c._id}')"><i class="fas fa-download"></i> PDF</button>
+                            <button class="btn btn-outline btn-sm" onclick="showDetails('${c._id}')"><i class="fas fa-eye"></i> Details</button>
+                            <button class="btn btn-outline btn-sm" onclick="verifyCert('${c.certificateNumber}')"><i class="fas fa-check"></i> Verify</button>
+                            <button class="btn btn-outline btn-sm" onclick="shareCert('${c.certificateNumber}')"><i class="fas fa-share"></i> Share</button>
+                            <button class="btn btn-outline btn-sm" onclick="sendEmail('${c._id}')"><i class="fas fa-envelope"></i> Email</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                studentGrid.innerHTML = `<div class="text-muted text-center" style="padding:40px;color:#ef4444;">❌ Failed to load: ${err.message}</div>`;
+            }
+        }
+
+        // ---------- Load Admin Certificates ----------
+        async function loadAdminCerts() {
+            try {
+                const res = await fetch(`${API_BASE}/certificates`);
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error);
+                let certs = data.certificates;
+                const search = adminSearch.value.toLowerCase();
+                const statusFilter = adminStatus.value;
+                if (search) {
+                    certs = certs.filter(c => 
+                        c.studentName.toLowerCase().includes(search) ||
+                        c.courseName.toLowerCase().includes(search) ||
+                        c.certificateNumber.toLowerCase().includes(search)
+                    );
+                }
+                if (statusFilter) {
+                    certs = certs.filter(c => c.status === statusFilter);
+                }
+                adminBody.innerHTML = certs.map((c, i) => `
+                    <tr>
+                        <td>${i+1}</td>
+                        <td><code>${c.certificateNumber}</code></td>
+                        <td>${c.studentName}</td>
+                        <td>${c.courseName}</td>
+                        <td><span class="badge badge-${c.status}">${c.status}</span></td>
+                        <td>
+                            <div class="flex" style="gap:4px;">
+                                <button class="btn btn-outline btn-sm" onclick="downloadCert('${c._id}')"><i class="fas fa-download"></i></button>
+                                <button class="btn btn-outline btn-sm" onclick="editCert('${c._id}')"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-red btn-sm" onclick="revokeCert('${c._id}')"><i class="fas fa-ban"></i></button>
+                                <button class="btn btn-outline btn-sm" onclick="sendEmail('${c._id}')"><i class="fas fa-envelope"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+                if (certs.length === 0) adminBody.innerHTML = `<tr><td colspan="6" class="text-muted text-center">No certificates match</td></tr>`;
+            } catch (err) {
+                adminBody.innerHTML = `<tr><td colspan="6" class="text-muted text-center">Error loading: ${err.message}</td></tr>`;
+            }
+        }
+
+        // ---------- Generate Certificate ----------
+        genForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const studentName = document.getElementById('gen-name').value.trim();
+            const courseName = document.getElementById('gen-course').value.trim();
+            const courseCode = document.getElementById('gen-code').value.trim().toUpperCase();
+            if (!studentName || !courseName || !courseCode) return alert('Please fill all fields');
+            try {
+                const res = await fetch(`${API_BASE}/certificates`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ studentName, courseName, courseCode })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Generation failed');
+                alert(`✅ Certificate ${data.certificate.certificateNumber} generated!`);
+                genModal.classList.remove('active');
+                genForm.reset();
+                loadStudentCerts();
+                loadAdminCerts();
+            } catch (err) {
+                alert('❌ Error: ' + err.message);
+            }
+        });
+
+        // ---------- Download PDF ----------
+        async function downloadCert(id) {
+            try {
+                const res = await fetch(`${API_BASE}/certificates/${id}/download`);
+                if (!res.ok) {
+                    const err = await res.json();
+                    throw new Error(err.error || 'Download failed');
+                }
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'certificate.pdf';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            } catch (err) {
+                alert('Download error: ' + err.message);
+            }
+        }
+
+        // ---------- Show Details ----------
+        async function showDetails(id) {
+            try {
+                const res = await fetch(`${API_BASE}/certificates`);
+                const data = await res.json();
+                const cert = data.certificates.find(c => c._id === id);
+                if (!cert) return alert('Certificate not found');
+                document.getElementById('details-title').textContent = `Certificate: ${cert.certificateNumber}`;
+                document.getElementById('details-body').innerHTML = `
+                    <div class="row"><span class="label">Student</span><span class="value">${cert.studentName}</span></div>
+                    <div class="row"><span class="label">Course</span><span class="value">${cert.courseName}</span></div>
+                    <div class="row"><span class="label">Number</span><span class="value"><code>${cert.certificateNumber}</code></span></div>
+                    <div class="row"><span class="label">Issue Date</span><span class="value">${new Date(cert.issueDate).toLocaleDateString()}</span></div>
+                    <div class="row"><span class="label">Status</span><span class="value"><span class="badge badge-${cert.status}">${cert.status}</span></span></div>
+                    <div style="margin-top:12px; text-align:center;">
+                        <div style="background:#f1f5f9; padding:12px; border-radius:8px; display:inline-block;">
+                            <i class="fas fa-qrcode" style="font-size:3rem; color:#3b82f6;"></i>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="width:100%; margin-top:12px;" onclick="downloadCert('${cert._id}')"><i class="fas fa-download"></i> Download PDF</button>
+                `;
+                detailsModal.classList.add('active');
+            } catch (err) {
+                alert('Error loading details');
+            }
+        }
+
+        // ---------- Revoke Certificate ----------
+        async function revokeCert(id) {
+            if (!confirm('Revoke this certificate?')) return;
+            try {
+                const res = await fetch(`${API_BASE}/certificates/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'revoked' })
+                });
+                if (!res.ok) throw new Error('Revoke failed');
+                alert('✅ Certificate revoked');
+                loadAdminCerts();
+                loadStudentCerts();
+            } catch (err) {
+                alert('❌ Error: ' + err.message);
+            }
+        }
+
+        // ---------- Edit ----------
+        async function editCert(id) {
+            try {
+                const res = await fetch(`${API_BASE}/certificates`);
+                const data = await res.json();
+                const cert = data.certificates.find(c => c._id === id);
+                if (!cert) return alert('Certificate not found');
+                
+                const newName = prompt('Edit student name:', cert.studentName);
+                if (newName && newName.trim()) {
+                    const updateRes = await fetch(`${API_BASE}/certificates/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ studentName: newName.trim() })
+                    });
+                    if (!updateRes.ok) throw new Error('Update failed');
+                    alert('✅ Certificate updated!');
+                    loadAdminCerts();
+                    loadStudentCerts();
+                }
+            } catch (err) {
+                alert('❌ Error: ' + err.message);
+            }
+        }
+
+        // ---------- Send Email ----------
+        async function sendEmail(id) {
+            const email = prompt('Enter student email address:');
+            if (!email) return;
+            try {
+                const res = await fetch(`${API_BASE}/certificates/${id}/email`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Send failed');
+                alert(`✅ Certificate sent to ${email}`);
+            } catch (err) {
+                alert('❌ Error: ' + err.message);
+            }
+        }
+
+        // ---------- Verify from Student View ----------
+        function verifyCert(number) {
+            document.querySelector('nav button[data-view="verify"]').click();
+            verifyInput.value = number;
+            verifyBtn.click();
+        }
+
+        // ---------- Share ----------
+        function shareCert(number) {
+            const url = `https://upskillshub.com/verify/${number}`;
+            if (navigator.share) {
+                navigator.share({ title: 'Certificate', text: 'Verify my certificate', url });
+            } else {
+                navigator.clipboard.writeText(url).then(() => alert('✅ Verification link copied to clipboard!'));
+            }
+        }
+
+        // ---------- Public Verify ----------
+        verifyBtn.addEventListener('click', async () => {
+            const number = verifyInput.value.trim();
+            if (!number) return alert('Enter a certificate number');
+            verifyResult.innerHTML = '<div class="spinner"></div>';
+            try {
+                const res = await fetch(`${API_BASE}/verify/${number}`);
+                const data = await res.json();
+                if (!res.ok) {
+                    verifyResult.innerHTML = `<div style="color:#ef4444; font-weight:600;">❌ ${data.message || 'Not found'}</div>`;
+                    return;
+                }
+                const c = data.certificate;
+                verifyResult.innerHTML = `
+                    <div class="result-card">
+                        <div class="row"><span class="label">Student</span><span class="value">${c.studentName}</span></div>
+                        <div class="row"><span class="label">Course</span><span class="value">${c.courseName}</span></div>
+                        <div class="row"><span class="label">Number</span><span class="value"><code>${c.certificateNumber}</code></span></div>
+                        <div class="row"><span class="label">Issue Date</span><span class="value">${new Date(c.issueDate).toLocaleDateString()}</span></div>
+                        <div class="row"><span class="label">Status</span><span class="value"><span class="badge badge-${c.status}">${c.status}</span></span></div>
+                    </div>
+                `;
+            } catch (err) {
+                verifyResult.innerHTML = `<div style="color:#ef4444; font-weight:600;">❌ Error: ${err.message}</div>`;
+            }
+        });
+
+        // ============================================================
+        // QR CODE SCANNER - SIMPLE VERSION
+        // ============================================================
+
+        const qrScanBtn = document.getElementById('qr-scan-btn');
+        const qrReader = document.getElementById('qr-reader');
+        let scanner = null;
+
+        qrScanBtn.addEventListener('click', async function() {
+            try {
+                qrReader.style.display = 'block';
+                qrScanBtn.disabled = true;
+                qrScanBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scanning...';
+
+                // Try loading from CDN
+                try {
+                    const { Html5Qrcode } = await import('https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js');
+                    scanner = new Html5Qrcode('qr-reader');
+                    
+                    await scanner.start(
+                        { facingMode: 'environment' },
+                        { fps: 10, qrbox: { width: 250, height: 250 } },
+                        function(decodedText) {
+                            const match = decodedText.match(/\/verify\/([A-Z0-9-]+)/);
+                            document.getElementById('verify-input').value = match ? match[1] : decodedText;
+                            document.getElementById('verify-btn').click();
+                            stopScanner();
+                        },
+                        function(error) {}
+                    );
+                } catch (importError) {
+                    // If dynamic import fails, use manual entry
+                    qrReader.innerHTML = `
+                        <div style="background:#f8fafc; padding:16px; border-radius:8px; margin-top:8px;">
+                            <p style="color:#64748b;">📷 Camera not available.</p>
+                            <p style="font-size:0.9rem; color:#64748b;">Please type the certificate number manually above.</p>
+                        </div>
+                    `;
+                    qrScanBtn.disabled = false;
+                    qrScanBtn.innerHTML = '<i class="fas fa-camera"></i> Scan QR Code';
+                }
+
+            } catch (error) {
+                alert('Camera error: ' + error.message);
+                stopScanner();
+            }
+        });
+
+        function stopScanner() {
+            if (scanner) {
+                scanner.stop().then(() => {
+                    qrReader.style.display = 'none';
+                    qrScanBtn.disabled = false;
+                    qrScanBtn.innerHTML = '<i class="fas fa-camera"></i> Scan QR Code';
+                });
+            }
+        }
+
+        // Stop scanner when clicking verify or typing
+        document.getElementById('verify-btn').addEventListener('click', stopScanner);
+        document.getElementById('verify-input').addEventListener('focus', stopScanner);
+
+        // ---------- Modal controls ----------
+        document.getElementById('btn-generate').addEventListener('click', () => genModal.classList.add('active'));
+        document.getElementById('modal-close').addEventListener('click', () => genModal.classList.remove('active'));
+        document.getElementById('details-close').addEventListener('click', () => detailsModal.classList.remove('active'));
+        document.querySelectorAll('.modal-overlay').forEach(el => {
+            el.addEventListener('click', (e) => {
+                if (e.target === el) el.classList.remove('active');
+            });
+        });
+
+        // ---------- Search/Filter ----------
+        adminSearch.addEventListener('input', loadAdminCerts);
+        adminStatus.addEventListener('change', loadAdminCerts);
+
+        // ---------- Initial load ----------
+        loadStudentCerts();
+
+        console.log('🚀 Frontend ready!');
+    </script>
+</body>
+</html>

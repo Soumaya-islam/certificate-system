@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Generate Certificate | Up Skills Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: #f3f4f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 26px; color: #111827; font-weight: 700; }
+        .header p { color: #6b7280; font-size: 15px; margin-top: 5px; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; color: #374151; margin-bottom: 6px; font-size: 14px; }
+        .form-group input { 
+            width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; 
+            font-size: 15px; transition: border-color 0.2s ease; background-color: #f9fafb;
+        }
+        .form-group input:focus { outline: none; border-color: #2563eb; background-color: white; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+
+        .btn-primary {
+            width: 100%; padding: 14px; background: #2563eb; color: white; border: none; 
+            border-radius: 8px; font-weight: 600; font-size: 16px; cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn-primary:disabled { background: #93c5fd; cursor: not-allowed; }
+
+        #response-box { margin-top: 25px; padding: 15px; border-radius: 8px; text-align: center; font-weight: 500; }
+        .hidden { display: none; }
+        .success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        .error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+        @media (max-width: 480px) {
+            .card { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <h1>Generate Certificate</h1>
+            <p>Fill in the details to issue a new certificate</p>
+        </div>
+
+        <form id="generateForm">
+            <div class="form-group">
+                <label for="studentName">Student Full Name</label>
+                <input type="text" id="studentName" placeholder="e.g. Jane Doe" required>
+            </div>
+            <div class="form-group">
+                <label for="courseName">Course Name</label>
+                <input type="text" id="courseName" placeholder="e.g. Fullstack Web Development" required>
+            </div>
+            <div class="form-group">
+                <label for="courseCode">Course Code (for ID)</label>
+                <input type="text" id="courseCode" placeholder="e.g. FD" required style="text-transform: uppercase;">
+            </div>
+            <div class="form-group">
+                <label for="email">Student Email (Optional)</label>
+                <input type="email" id="email" placeholder="student@example.com">
+            </div>
+            <button type="submit" class="btn-primary" id="submitBtn">Generate Certificate</button>
+        </form>
+
+        <div id="response-box" class="hidden"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('generateForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const responseBox = document.getElementById('response-box');
+        const API_URL = 'http://127.0.0.1:5000/api/certificates';
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            responseBox.classList.add('hidden');
+            responseBox.className = 'hidden';
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Generating...';
+
+            const studentName = document.getElementById('studentName').value.trim();
+            const courseName = document.getElementById('courseName').value.trim();
+            const courseCode = document.getElementById('courseCode').value.trim().toUpperCase();
+            const email = document.getElementById('email').value.trim();
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ studentName, courseName, courseCode, email })
+                });
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    responseBox.className = 'success';
+                    responseBox.innerHTML = `<strong>✅ Certificate Generated!</strong><br>ID: <strong>${data.certificate.certificateNumber}</strong>`;
+                    form.reset();
+                } else {
+                    responseBox.className = 'error';
+                    responseBox.innerHTML = `<strong>❌ Error:</strong> ${data.error || 'Something went wrong.'}`;
+                }
+            } catch (error) {
+                responseBox.className = 'error';
+                responseBox.innerHTML = `<strong>❌ Network Error:</strong> ${error.message}`;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Generate Certificate';
+                responseBox.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
