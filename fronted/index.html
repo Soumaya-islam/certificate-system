@@ -341,273 +341,267 @@
 
     <!-- ======================== JAVASCRIPT ======================== -->
     <script>
-        // ---------- API base URL ----------
-const API_BASE = 'http://localhost:5000/api';
-const API_AUTH = 'http://localhost:5000/api/auth';
+        // ============================================================
+        // API BASE URL - Works on Vercel and Local
+        // ============================================================
+        const API_BASE = '/api';
+        const API_AUTH = '/api/auth';
 
-// ================================================================
-// AUTHENTICATION
-// ================================================================
+        // ============================================================
+        // AUTHENTICATION
+        // ============================================================
 
-const token = localStorage.getItem('token');
-const user = JSON.parse(localStorage.getItem('user') || 'null');
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
 
-function showApp() {
-    document.getElementById('view-auth').style.display = 'none';
-    document.getElementById('view-student').style.display = 'block';
-    if (user && user.role === 'admin') {
-        document.querySelector('[data-view="admin"]').style.display = 'inline-block';
-        document.querySelector('[data-view="dashboard"]').style.display = 'inline-block';
-    } else {
-        document.querySelector('[data-view="admin"]').style.display = 'none';
-        document.querySelector('[data-view="dashboard"]').style.display = 'none';
-    }
-    loadStudentCerts();
-}
-
-function showLogin() {
-    document.getElementById('view-auth').style.display = 'block';
-    document.getElementById('view-student').style.display = 'none';
-    document.getElementById('view-admin').style.display = 'none';
-    document.getElementById('view-dashboard').style.display = 'none';
-    document.getElementById('view-verify').style.display = 'none';
-}
-
-if (token && user) {
-    showApp();
-} else {
-    showLogin();
-}
-
-// Toggle login/register
-document.getElementById('show-register-link').addEventListener('click', (e) => {
-    e.preventDefault();
-    document.getElementById('login-form-container').style.display = 'none';
-    document.getElementById('register-form-container').style.display = 'block';
-});
-
-document.getElementById('show-login-link').addEventListener('click', (e) => {
-    e.preventDefault();
-    document.getElementById('register-form-container').style.display = 'none';
-    document.getElementById('login-form-container').style.display = 'block';
-});
-
-// Login
-document.getElementById('login-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-    try {
-        const res = await fetch(`${API_AUTH}/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error);
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        alert('✅ Login successful!');
-        location.reload();
-    } catch (err) {
-        alert('❌ Login failed: ' + err.message);
-    }
-});
-
-// Register
-document.getElementById('register-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const username = document.getElementById('reg-username').value;
-    const email = document.getElementById('reg-email').value;
-    const password = document.getElementById('reg-password').value;
-    const role = document.getElementById('reg-role').value;
-    try {
-        const res = await fetch(`${API_AUTH}/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, email, password, role })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error);
-        alert('✅ Registration successful! Please login.');
-        document.getElementById('register-form-container').style.display = 'none';
-        document.getElementById('login-form-container').style.display = 'block';
-    } catch (err) {
-        alert('❌ Registration failed: ' + err.message);
-    }
-});
-
-// Logout
-function logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    location.reload();
-}
-
-// Add logout button
-const nav = document.querySelector('nav div:last-child');
-const logoutBtn = document.createElement('button');
-logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
-logoutBtn.style.color = '#EF4444';
-logoutBtn.onclick = logout;
-nav.appendChild(logoutBtn);
-
-// ---------- DOM refs ----------
-const studentGrid = document.getElementById('student-grid');
-const certCount = document.getElementById('cert-count');
-const adminBody = document.getElementById('admin-table-body');
-const adminSearch = document.getElementById('admin-search');
-const adminStatus = document.getElementById('admin-status-filter');
-const verifyInput = document.getElementById('verify-input');
-const verifyBtn = document.getElementById('verify-btn');
-const verifyResult = document.getElementById('verify-result');
-
-const genModal = document.getElementById('generate-modal');
-const genForm = document.getElementById('generate-form');
-const detailsModal = document.getElementById('details-modal');
-
-// Navigation
-document.querySelectorAll('nav button').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const view = btn.dataset.view;
-        document.getElementById('view-student').style.display = view === 'student' ? 'block' : 'none';
-        document.getElementById('view-admin').style.display = view === 'admin' ? 'block' : 'none';
-        document.getElementById('view-dashboard').style.display = view === 'dashboard' ? 'block' : 'none';
-        document.getElementById('view-verify').style.display = view === 'verify' ? 'block' : 'none';
-        if (view === 'student') loadStudentCerts();
-        if (view === 'admin') loadAdminCerts();
-        if (view === 'dashboard') loadDashboard();
-    });
-});
-
-// ---------- Load Student Certificates ----------
-async function loadStudentCerts() {
-    try {
-        const res = await fetch(`${API_BASE}/certificates`, {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        const data = await res.json();
-        if (!data.success) throw new Error(data.error);
-        const certs = data.certificates;
-        certCount.textContent = `${certs.length} certificates`;
-        if (certs.length === 0) {
-            studentGrid.innerHTML = `<div class="text-muted text-center" style="padding:40px;"><i class="fas fa-certificate" style="font-size:2rem;display:block;margin-bottom:12px;"></i> No certificates found</div>`;
-            return;
+        function showApp() {
+            document.getElementById('view-auth').style.display = 'none';
+            document.getElementById('view-student').style.display = 'block';
+            if (user && user.role === 'admin') {
+                document.querySelector('[data-view="admin"]').style.display = 'inline-block';
+                document.querySelector('[data-view="dashboard"]').style.display = 'inline-block';
+            } else {
+                document.querySelector('[data-view="admin"]').style.display = 'none';
+                document.querySelector('[data-view="dashboard"]').style.display = 'none';
+            }
+            loadStudentCerts();
         }
-        studentGrid.innerHTML = certs.map(c => `
-            <div class="card">
-                <div class="flex" style="justify-content:space-between;">
-                    <span class="badge badge-${c.status}">${c.status}</span>
-                    <span class="text-muted" style="font-size:0.75rem;">${c.certificateNumber}</span>
-                </div>
-                <div style="margin-top:8px;">
-                    <div style="font-weight:600; font-size:1.1rem;">${c.studentName}</div>
-                    <div class="text-muted">${c.courseName}</div>
-                    <div class="text-muted" style="font-size:0.8rem;">Issued: ${new Date(c.issueDate).toLocaleDateString()}</div>
-                </div>
-                <div class="flex" style="margin-top:12px; gap:6px; flex-wrap:wrap;">
-                    <button class="btn btn-outline btn-sm" onclick="downloadCert('${c._id}')"><i class="fas fa-download"></i> PDF</button>
-                    <button class="btn btn-outline btn-sm" onclick="showDetails('${c._id}')"><i class="fas fa-eye"></i> Details</button>
-                    <button class="btn btn-outline btn-sm" onclick="verifyCert('${c.certificateNumber}')"><i class="fas fa-check"></i> Verify</button>
-                    <button class="btn btn-outline btn-sm" onclick="shareCert('${c.certificateNumber}')"><i class="fas fa-share"></i> Share</button>
-                    <button class="btn btn-outline btn-sm" onclick="sendEmail('${c._id}')"><i class="fas fa-envelope"></i> Email</button>
-                </div>
-            </div>
-        `).join('');
-    } catch (err) {
-        studentGrid.innerHTML = `<div class="text-muted text-center" style="padding:40px;color:#ef4444;">❌ Failed to load: ${err.message}</div>`;
-    }
-}
 
-// ---------- Load Admin Certificates ----------
-async function loadAdminCerts() {
-    try {
-        const res = await fetch(`${API_BASE}/certificates`, {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        function showLogin() {
+            document.getElementById('view-auth').style.display = 'block';
+            document.getElementById('view-student').style.display = 'none';
+            document.getElementById('view-admin').style.display = 'none';
+            document.getElementById('view-dashboard').style.display = 'none';
+            document.getElementById('view-verify').style.display = 'none';
+        }
+
+        if (token && user) {
+            showApp();
+        } else {
+            showLogin();
+        }
+
+        // Toggle login/register
+        document.getElementById('show-register-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('login-form-container').style.display = 'none';
+            document.getElementById('register-form-container').style.display = 'block';
         });
-        const data = await res.json();
-        if (!data.success) throw new Error(data.error);
-        let certs = data.certificates;
-        const search = adminSearch.value.toLowerCase();
-        const statusFilter = adminStatus.value;
-        if (search) {
-            certs = certs.filter(c => 
-                c.studentName.toLowerCase().includes(search) ||
-                c.courseName.toLowerCase().includes(search) ||
-                c.certificateNumber.toLowerCase().includes(search)
-            );
+
+        document.getElementById('show-login-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('register-form-container').style.display = 'none';
+            document.getElementById('login-form-container').style.display = 'block';
+        });
+
+        // Login
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            try {
+                const res = await fetch(`${API_AUTH}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                alert('✅ Login successful!');
+                location.reload();
+            } catch (err) {
+                alert('❌ Login failed: ' + err.message);
+            }
+        });
+
+        // Register
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('reg-username').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const role = document.getElementById('reg-role').value;
+            try {
+                const res = await fetch(`${API_AUTH}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password, role })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                alert('✅ Registration successful! Please login.');
+                document.getElementById('register-form-container').style.display = 'none';
+                document.getElementById('login-form-container').style.display = 'block';
+            } catch (err) {
+                alert('❌ Registration failed: ' + err.message);
+            }
+        });
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            location.reload();
         }
-        if (statusFilter) {
-            certs = certs.filter(c => c.status === statusFilter);
-        }
-        adminBody.innerHTML = certs.map((c, i) => `
-            <tr>
-                <td>${i+1}</td>
-                <td><code>${c.certificateNumber}</code></td>
-                <td>${c.studentName}</td>
-                <td>${c.courseName}</td>
-                <td><span class="badge badge-${c.status}">${c.status}</span></td>
-                <td>
-                    <div class="flex" style="gap:4px;">
-                        <button class="btn btn-outline btn-sm" onclick="downloadCert('${c._id}')"><i class="fas fa-download"></i></button>
-                        <button class="btn btn-outline btn-sm" onclick="editCert('${c._id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-red btn-sm" onclick="revokeCert('${c._id}')"><i class="fas fa-ban"></i></button>
-                        <button class="btn btn-outline btn-sm" onclick="sendEmail('${c._id}')"><i class="fas fa-envelope"></i></button>
+
+        // Add logout button
+        const nav = document.querySelector('nav div:last-child');
+        const logoutBtn = document.createElement('button');
+        logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+        logoutBtn.style.color = '#EF4444';
+        logoutBtn.onclick = logout;
+        nav.appendChild(logoutBtn);
+
+        // ---------- DOM refs ----------
+        const studentGrid = document.getElementById('student-grid');
+        const certCount = document.getElementById('cert-count');
+        const adminBody = document.getElementById('admin-table-body');
+        const adminSearch = document.getElementById('admin-search');
+        const adminStatus = document.getElementById('admin-status-filter');
+        const verifyInput = document.getElementById('verify-input');
+        const verifyBtn = document.getElementById('verify-btn');
+        const verifyResult = document.getElementById('verify-result');
+
+        const genModal = document.getElementById('generate-modal');
+        const genForm = document.getElementById('generate-form');
+        const detailsModal = document.getElementById('details-modal');
+
+        // Navigation
+        document.querySelectorAll('nav button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const view = btn.dataset.view;
+                document.getElementById('view-student').style.display = view === 'student' ? 'block' : 'none';
+                document.getElementById('view-admin').style.display = view === 'admin' ? 'block' : 'none';
+                document.getElementById('view-dashboard').style.display = view === 'dashboard' ? 'block' : 'none';
+                document.getElementById('view-verify').style.display = view === 'verify' ? 'block' : 'none';
+                if (view === 'student') loadStudentCerts();
+                if (view === 'admin') loadAdminCerts();
+                if (view === 'dashboard') loadDashboard();
+            });
+        });
+
+        // ---------- Load Student Certificates ----------
+        async function loadStudentCerts() {
+            try {
+                const res = await fetch(`${API_BASE}/certificates`);
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error);
+                const certs = data.certificates || [];
+                certCount.textContent = `${certs.length} certificates`;
+                if (certs.length === 0) {
+                    studentGrid.innerHTML = `<div class="text-muted text-center" style="padding:40px;"><i class="fas fa-certificate" style="font-size:2rem;display:block;margin-bottom:12px;"></i> No certificates found</div>`;
+                    return;
+                }
+                studentGrid.innerHTML = certs.map(c => `
+                    <div class="card">
+                        <div class="flex" style="justify-content:space-between;">
+                            <span class="badge badge-${c.status || 'pending'}">${c.status || 'pending'}</span>
+                            <span class="text-muted" style="font-size:0.75rem;">${c.certificateNumber || 'N/A'}</span>
+                        </div>
+                        <div style="margin-top:8px;">
+                            <div style="font-weight:600; font-size:1.1rem;">${c.studentName || 'Unknown'}</div>
+                            <div class="text-muted">${c.courseName || 'Unknown'}</div>
+                            <div class="text-muted" style="font-size:0.8rem;">Issued: ${c.issueDate ? new Date(c.issueDate).toLocaleDateString() : 'N/A'}</div>
+                        </div>
+                        <div class="flex" style="margin-top:12px; gap:6px; flex-wrap:wrap;">
+                            <button class="btn btn-outline btn-sm" onclick="downloadCert('${c._id}')"><i class="fas fa-download"></i> PDF</button>
+                            <button class="btn btn-outline btn-sm" onclick="showDetails('${c._id}')"><i class="fas fa-eye"></i> Details</button>
+                            <button class="btn btn-outline btn-sm" onclick="verifyCert('${c.certificateNumber}')"><i class="fas fa-check"></i> Verify</button>
+                            <button class="btn btn-outline btn-sm" onclick="shareCert('${c.certificateNumber}')"><i class="fas fa-share"></i> Share</button>
+                            <button class="btn btn-outline btn-sm" onclick="sendEmail('${c._id}')"><i class="fas fa-envelope"></i> Email</button>
+                        </div>
                     </div>
-                </td>
-            </tr>
-        `).join('');
-        if (certs.length === 0) adminBody.innerHTML = `<tr><td colspan="6" class="text-muted text-center">No certificates match</td></tr>`;
-    } catch (err) {
-        adminBody.innerHTML = `<tr><td colspan="6" class="text-muted text-center">Error loading: ${err.message}</td></tr>`;
-    }
-}
+                `).join('');
+            } catch (err) {
+                studentGrid.innerHTML = `<div class="text-muted text-center" style="padding:40px;color:#ef4444;">❌ Failed to load: ${err.message}</div>`;
+            }
+        }
 
-// ---------- Load Dashboard ----------
-async function loadDashboard() {
-    try {
-        const res = await fetch(`${API_BASE}/dashboard`, {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        const data = await res.json();
-        if (!data.success) throw new Error(data.error);
-        const d = data.data;
-        document.getElementById('dash-total').textContent = d.total;
-        document.getElementById('dash-valid').textContent = d.valid;
-        document.getElementById('dash-revoked').textContent = d.revoked;
-        document.getElementById('dash-pending').textContent = d.pending;
-        const dailyHTML = d.dailyData.map(day => `
-            <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f1f5f9;">
-                <span>${day.date}</span>
-                <span style="font-weight:600;">${day.count} certificates</span>
-            </div>
-        `).join('');
-        document.getElementById('dash-daily').innerHTML = dailyHTML || '<p class="text-muted">No data available</p>';
-        const coursesHTML = d.topCourses.map(course => `
-            <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f1f5f9;">
-                <span>${course.name}</span>
-                <span style="font-weight:600;">${course.count} certs</span>
-            </div>
-        `).join('');
-        document.getElementById('dash-courses').innerHTML = coursesHTML || '<p class="text-muted">No courses yet</p>';
-        const recentHTML = d.recent.map(activity => `
-            <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f1f5f9;">
-                <span><strong>${activity.studentName}</strong> - ${activity.certificateNumber}</span>
-                <span>
-                    <span class="badge badge-${activity.status}">${activity.status}</span>
-                    <span class="text-muted" style="font-size:0.8rem;">${new Date(activity.createdAt).toLocaleDateString()}</span>
-                </span>
-            </div>
-        `).join('');
-        document.getElementById('dash-recent').innerHTML = recentHTML || '<p class="text-muted">No recent activity</p>';
-        document.getElementById('dashboard-update').textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
-    } catch (err) {
-        document.getElementById('dash-daily').innerHTML = `<p class="text-muted" style="color:#ef4444;">❌ Failed to load: ${err.message}</p>`;
-    }
-}
-// ---------- Generate Certificate ----------
+        // ---------- Load Admin Certificates ----------
+        async function loadAdminCerts() {
+            try {
+                const res = await fetch(`${API_BASE}/certificates`);
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error);
+                let certs = data.certificates || [];
+                const search = adminSearch.value.toLowerCase();
+                const statusFilter = adminStatus.value;
+                if (search) {
+                    certs = certs.filter(c => 
+                        (c.studentName || '').toLowerCase().includes(search) ||
+                        (c.courseName || '').toLowerCase().includes(search) ||
+                        (c.certificateNumber || '').toLowerCase().includes(search)
+                    );
+                }
+                if (statusFilter) {
+                    certs = certs.filter(c => c.status === statusFilter);
+                }
+                adminBody.innerHTML = certs.map((c, i) => `
+                    <tr>
+                        <td>${i+1}</td>
+                        <td><code>${c.certificateNumber || 'N/A'}</code></td>
+                        <td>${c.studentName || 'Unknown'}</td>
+                        <td>${c.courseName || 'Unknown'}</td>
+                        <td><span class="badge badge-${c.status || 'pending'}">${c.status || 'pending'}</span></td>
+                        <td>
+                            <div class="flex" style="gap:4px;">
+                                <button class="btn btn-outline btn-sm" onclick="downloadCert('${c._id}')"><i class="fas fa-download"></i></button>
+                                <button class="btn btn-outline btn-sm" onclick="editCert('${c._id}')"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-red btn-sm" onclick="revokeCert('${c._id}')"><i class="fas fa-ban"></i></button>
+                                <button class="btn btn-outline btn-sm" onclick="sendEmail('${c._id}')"><i class="fas fa-envelope"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+                if (certs.length === 0) adminBody.innerHTML = `<tr><td colspan="6" class="text-muted text-center">No certificates match</td></tr>`;
+            } catch (err) {
+                adminBody.innerHTML = `<tr><td colspan="6" class="text-muted text-center">Error loading: ${err.message}</td></tr>`;
+            }
+        }
+
+        // ---------- Load Dashboard ----------
+        async function loadDashboard() {
+            try {
+                const res = await fetch(`${API_BASE}/dashboard`);
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error);
+                const d = data.data || {};
+                document.getElementById('dash-total').textContent = d.total || 0;
+                document.getElementById('dash-valid').textContent = d.valid || 0;
+                document.getElementById('dash-revoked').textContent = d.revoked || 0;
+                document.getElementById('dash-pending').textContent = d.pending || 0;
+                document.getElementById('dash-daily').innerHTML = (d.dailyData || []).map(day => `
+                    <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f1f5f9;">
+                        <span>${day.date || 'N/A'}</span>
+                        <span style="font-weight:600;">${day.count || 0} certificates</span>
+                    </div>
+                `).join('') || '<p class="text-muted">No data available</p>';
+                document.getElementById('dash-courses').innerHTML = (d.topCourses || []).map(course => `
+                    <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f1f5f9;">
+                        <span>${course.name || 'Unknown'}</span>
+                        <span style="font-weight:600;">${course.count || 0} certs</span>
+                    </div>
+                `).join('') || '<p class="text-muted">No courses yet</p>';
+                document.getElementById('dash-recent').innerHTML = (d.recent || []).map(activity => `
+                    <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f1f5f9;">
+                        <span><strong>${activity.studentName || 'Unknown'}</strong> - ${activity.certificateNumber || 'N/A'}</span>
+                        <span>
+                            <span class="badge badge-${activity.status || 'pending'}">${activity.status || 'pending'}</span>
+                            <span class="text-muted" style="font-size:0.8rem;">${activity.createdAt ? new Date(activity.createdAt).toLocaleDateString() : 'N/A'}</span>
+                        </span>
+                    </div>
+                `).join('') || '<p class="text-muted">No recent activity</p>';
+                document.getElementById('dashboard-update').textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+            } catch (err) {
+                document.getElementById('dash-daily').innerHTML = `<p class="text-muted" style="color:#ef4444;">❌ Failed to load: ${err.message}</p>`;
+            }
+        }
+
+        // ---------- Generate Certificate ----------
         genForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const studentName = document.getElementById('gen-name').value.trim();
@@ -662,9 +656,7 @@ async function loadDashboard() {
         // ---------- Show Details ----------
         async function showDetails(id) {
             try {
-                const res = await fetch(`${API_BASE}/certificates`, {
-                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-                });
+                const res = await fetch(`${API_BASE}/certificates`);
                 const data = await res.json();
                 const cert = data.certificates.find(c => c._id === id);
                 if (!cert) return alert('Certificate not found');
@@ -712,9 +704,7 @@ async function loadDashboard() {
         // ---------- Edit ----------
         async function editCert(id) {
             try {
-                const res = await fetch(`${API_BASE}/certificates`, {
-                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-                });
+                const res = await fetch(`${API_BASE}/certificates`);
                 const data = await res.json();
                 const cert = data.certificates.find(c => c._id === id);
                 if (!cert) return alert('Certificate not found');
@@ -877,3 +867,4 @@ async function loadDashboard() {
     </script>
 </body>
 </html>
+```
