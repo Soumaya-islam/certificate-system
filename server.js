@@ -1,7 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const path = require('path');
 require('dotenv').config();
+
+const authRoutes = require('./auth');
 
 const app = express();
 
@@ -14,10 +17,11 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/upskills_ce
 app.use(cors());
 app.use(express.json());
 
-// Test route
-app.get('/', (req, res) => {
-    res.send('✅ Up Skills Certificate API is running');
-});
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, 'fronted')));
+
+// Auth routes
+app.use('/api/auth', authRoutes);
 
 // API Routes
 app.get('/api/certificates', async (req, res) => {
@@ -28,9 +32,14 @@ app.get('/api/certificates', async (req, res) => {
     }
 });
 
-// Health check for Vercel
+// Health check
 app.get('/api/health', (req, res) => {
     res.status(200).json({ status: 'ok', message: 'Server is running' });
+});
+
+// Fallback - serve frontend for all other routes
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'fronted', 'index.html'));
 });
 
 // Export for Vercel
