@@ -132,8 +132,6 @@ router.post("/register", async (req, res) => {
 
 // ============================================================
 // LOGIN
-const User = require('./models/User');
-
 // POST /api/auth/login
 // ============================================================
 
