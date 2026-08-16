@@ -5,6 +5,13 @@ const path = require("path");
 require("dotenv").config();
 
 const authRoutes = require("./auth");
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const path = require('path');
+require('dotenv').config();
+
+const authRoutes = require('./auth');
 
 const app = express();
 
@@ -34,6 +41,29 @@ app.get("/api/health", (req, res) => {
         status: "ok",
         message: "Server is running"
     });
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, 'fronted')));
+
+// Auth routes
+app.use('/api/auth', authRoutes);
+
+// API Routes
+app.get('/api/certificates', async (req, res) => {
+    try {
+        res.json({ success: true, message: 'API is working' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Health check
+app.get('/api/health', (req, res) => {
+    res.status(200).json({ status: 'ok', message: 'Server is running' });
+});
+
+// Fallback - serve frontend for all other routes
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'fronted', 'index.html'));
 });
 
 // Fallback - serve frontend index.html for any other route
