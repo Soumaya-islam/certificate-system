@@ -1,3 +1,3 @@
-const app = require("../server.cjs");
+const app = require("../server.js");
 
 module.exports = app;
