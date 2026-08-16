@@ -16,12 +16,12 @@
             "dest": "api/index.cjs"
         },
         {
-            "src": "/(.*)",
-            "dest": "/fronted/$1"
-        },
-        {
             "src": "/",
             "dest": "/fronted/index.html"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/fronted/$1"
         }
     ]
 }
