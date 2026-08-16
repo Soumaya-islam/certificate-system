@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const path = require("path");
 require("dotenv").config();
 
 const authRoutes = require("./auth");
@@ -11,21 +10,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve static frontend files
-app.use(express.static(path.join(__dirname, "fronted")));
-
-mongoose.connect(
-    process.env.MONGO_URI || "mongodb://localhost:27017/upskills_certificates"
-)
-.then(() => console.log("✅ MongoDB connected"))
-.catch(err => console.log("❌ MongoDB error:", err.message));
-
 app.use("/api/auth", authRoutes);
 
-app.get("/api/certificates", (req, res) => {
+app.get("/", (req, res) => {
     res.json({
         success: true,
-        message: "API is working"
+        message: "Up Skills Certificate API is running"
     });
 });
 
@@ -36,10 +26,21 @@ app.get("/api/health", (req, res) => {
     });
 });
 
-// Fallback - serve frontend index.html for any other route
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "fronted", "index.html"));
+app.get("/api/certificates", async (req, res) => {
+    res.json({
+        success: true,
+        message: "API is working",
+        certificates: []
+    });
 });
+
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+        console.log("✅ MongoDB connected");
+    })
+    .catch((err) => {
+        console.log("❌ MongoDB error:", err.message);
+    });
 
 module.exports = app;
 
@@ -48,6 +49,5 @@ if (require.main === module) {
 
     app.listen(PORT, () => {
         console.log(`🚀 Server running on http://localhost:${PORT}`);
-        console.log(`❤️ Health: http://localhost:${PORT}/api/health`);
     });
 }

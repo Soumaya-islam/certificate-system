@@ -1,33 +1,61 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const jwt = require("jsonwebtoken");
 
-// Authenticate user (check if logged in)
-const authenticate = async (req, res, next) => {
+const JWT_SECRET = process.env.JWT_SECRET;
+
+function authenticateToken(req, res, next) {
+
+    const authHeader = req.headers.authorization;
+
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if (!token) {
+        return res.status(401).json({
+            success: false,
+            error: "Access token required."
+        });
+    }
+
     try {
-        const token = req.header('Authorization')?.replace('Bearer ', '');
-        if (!token) {
-            return res.status(401).json({ error: 'Authentication required' });
-        }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.id).select('-password');
-        if (!user) {
-            return res.status(401).json({ error: 'User not found' });
-        }
+        const decoded = jwt.verify(
+            token,
+            JWT_SECRET
+        );
 
-        req.user = user;
+        req.user = decoded;
+
         next();
+
     } catch (error) {
-        return res.status(401).json({ error: 'Invalid or expired token' });
-    }
-};
 
-// Check if user is admin
-const requireAdmin = (req, res, next) => {
-    if (req.user.role !== 'admin') {
-        return res.status(403).json({ error: 'Admin access required' });
+        return res.status(403).json({
+            success: false,
+            error: "Invalid or expired token."
+        });
+
     }
+}
+
+function requireAdmin(req, res, next) {
+
+    if (!req.user) {
+        return res.status(401).json({
+            success: false,
+            error: "Authentication required."
+        });
+    }
+
+    if (req.user.role !== "admin") {
+        return res.status(403).json({
+            success: false,
+            error: "Admin access required."
+        });
+    }
+
     next();
-};
+}
 
-module.exports = { authenticate, requireAdmin };
+module.exports = {
+    authenticateToken,
+    requireAdmin
+};
