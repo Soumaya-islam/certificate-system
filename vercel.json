@@ -1,27 +1,13 @@
 {
-    "version": 2,
-    "builds": [
-        {
-            "src": "api/index.cjs",
-            "use": "@vercel/node"
-        },
-        {
-            "src": "fronted/**",
-            "use": "@vercel/static"
+    "functions": {
+        "api/index.cjs": {
+            "includeFiles": "fronted/**"
         }
-    ],
-    "routes": [
+    },
+    "rewrites": [
         {
-            "src": "/api/(.*)",
-            "dest": "api/index.cjs"
-        },
-        {
-            "src": "/",
-            "dest": "/fronted/index.html"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/fronted/$1"
+            "source": "/(.*)",
+            "destination": "/api/index.cjs"
         }
     ]
 }
