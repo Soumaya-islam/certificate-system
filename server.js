@@ -42,6 +42,19 @@ app.get("/api/health", (req, res) => {
     });
 });
 
+// Debug route
+app.get("/api/debug", (req, res) => {
+    const fs = require("fs");
+    try {
+        const files = fs.readdirSync(__dirname);
+        const frontedExists = fs.existsSync(path.join(__dirname, "fronted"));
+        const frontedFiles = frontedExists ? fs.readdirSync(path.join(__dirname, "fronted")) : "fronted folder not found";
+        res.json({ dirname: __dirname, rootFiles: files, frontedExists, frontedFiles });
+    } catch (e) {
+        res.json({ error: e.message });
+    }
+});
+
 // Fallback - serve frontend index.html for any other route
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "fronted", "index.html"));
