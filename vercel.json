@@ -3,16 +3,25 @@
     "builds": [
         {
             "src": "api/index.cjs",
-            "use": "@vercel/node",
-            "config": {
-                "includeFiles": "fronted/**"
-            }
+            "use": "@vercel/node"
+        },
+        {
+            "src": "fronted/**",
+            "use": "@vercel/static"
         }
     ],
     "routes": [
         {
-            "src": "/(.*)",
+            "src": "/api/(.*)",
             "dest": "api/index.cjs"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/fronted/$1"
+        },
+        {
+            "src": "/",
+            "dest": "/fronted/index.html"
         }
     ]
 }
