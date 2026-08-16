@@ -41,6 +41,7 @@ app.get("/api/health", (req, res) => {
         status: "ok",
         message: "Server is running"
     });
+});
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, 'fronted')));
 
