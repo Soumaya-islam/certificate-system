@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>" />
     <style>
-        /* Brand Colors */
         :root {
             --primary-blue: #3B82F6;
             --primary-dark: #1E293B;
@@ -21,8 +20,6 @@
             --bg-light: #F1F5F9;
             --white: #FFFFFF;
         }
-
-        /* Reset & base */
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
             font-family: 'Inter', sans-serif;
@@ -32,8 +29,6 @@
             line-height:1.6;
         }
         .container { max-width:1280px; margin:0 auto; }
-
-        /* Navigation */
         nav {
             display:flex; justify-content:space-between; align-items:center;
             flex-wrap:wrap; gap:12px;
@@ -60,8 +55,6 @@
             background: var(--primary-blue);
             color: white;
         }
-
-        /* Cards */
         .card {
             background: var(--white);
             border-radius: 12px;
@@ -78,17 +71,11 @@
             padding-bottom: 8px;
             margin-bottom: 16px;
         }
-
-        /* Grid */
         .grid-3 { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:20px; }
-
-        /* Badges */
         .badge { display:inline-block; padding:4px 12px; border-radius:999px; font-size:0.75rem; font-weight:600; }
         .badge-valid { background:#DCFCE7; color:#166534; }
         .badge-revoked { background:#FEE2E2; color:#991B1B; }
         .badge-pending { background:#FEF9C3; color:#854D0E; }
-
-        /* Buttons */
         .btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:8px; border:none; font-weight:600; font-size:0.85rem; cursor:pointer; transition:0.2s; background:var(--bg-light); color:var(--text-dark); }
         .btn-primary { background:var(--primary-blue); color:white; }
         .btn-primary:hover { background:#2563EB; }
@@ -97,15 +84,11 @@
         .btn-outline { background:transparent; border:1px solid var(--border-light); }
         .btn-outline:hover { background:var(--bg-light); }
         .btn-sm { padding:4px 12px; font-size:0.75rem; }
-
-        /* Tables */
         .table-wrap { overflow-x:auto; border-radius:12px; border:1px solid var(--border-light); }
         table { width:100%; border-collapse:collapse; font-size:0.9rem; }
         th { background:var(--bg-light); padding:12px 16px; text-align:left; font-weight:600; border-bottom:1px solid var(--border-light); color:var(--text-dark); }
         td { padding:12px 16px; border-bottom:1px solid var(--border-light); }
         tr:last-child td { border-bottom:none; }
-
-        /* Modals */
         .modal-overlay { position:fixed; inset:0; background:rgba(15,23,42,0.5); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:999; padding:20px; }
         .modal-overlay.active { display:flex; }
         .modal { background:var(--white); border-radius:16px; max-width:500px; width:100%; padding:32px; max-height:90vh; overflow-y:auto; }
@@ -114,24 +97,16 @@
         .modal input, .modal select { width:100%; padding:10px 14px; border:1px solid var(--border-light); border-radius:8px; margin-bottom:12px; font-family:inherit; }
         .modal input:focus, .modal select:focus { border-color:var(--primary-blue); outline:none; }
         .modal label { font-weight:500; display:block; margin-bottom:4px; color:var(--text-dark); }
-
-        /* Verify Box */
         .verify-box { max-width:520px; margin:40px auto; background:var(--white); padding:32px; border-radius:16px; border:1px solid var(--border-light); border-top:4px solid var(--primary-blue); text-align:center; }
         .verify-box .input-group { display:flex; gap:8px; }
         .verify-box input { flex:1; padding:10px 14px; border:1px solid var(--border-light); border-radius:8px; font-family:inherit; }
         .verify-box input:focus { border-color:var(--primary-blue); outline:none; }
-
-        /* Result Card */
         .result-card { background:var(--bg-light); border-radius:12px; padding:16px; margin-top:16px; text-align:left; }
         .result-card .row { display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid var(--border-light); }
         .result-card .row:last-child { border-bottom:none; }
         .result-card .label { font-weight:500; color:var(--text-muted); }
         .result-card .value { font-weight:600; }
-
-        /* Auth */
         #view-auth { display:block; }
-
-        /* Misc */
         .spinner { display:inline-block; width:20px; height:20px; border:2px solid var(--border-light); border-top-color:var(--primary-blue); border-radius:50%; animation:spin 0.6s linear infinite; }
         @keyframes spin { to { transform:rotate(360deg); } }
         .hidden { display:none !important; }
@@ -141,8 +116,6 @@
         .flex-between { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
         .mt-4 { margin-top:16px; }
         .mb-4 { margin-bottom:16px; }
-
-        /* Responsive */
         @media (max-width:768px) {
             body { padding:16px; }
             .grid-3 { grid-template-columns:1fr; }
@@ -156,7 +129,6 @@
 <body>
     <div class="container">
 
-        <!-- ======= NAVIGATION WITH LOGO ======= -->
         <nav>
             <div style="display:flex; align-items:center; gap:12px;">
                 <div style="width:40px; height:40px; background:#3B82F6; border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:1.2rem;">
@@ -177,10 +149,8 @@
             </div>
         </nav>
 
-        <!-- ======= LOGIN/REGISTER VIEW ======= -->
         <div id="view-auth">
             <div class="verify-box">
-                <!-- Login Form -->
                 <div id="login-form-container">
                     <i class="fas fa-lock" style="font-size:3rem; color:#3B82F6;"></i>
                     <h2>Login</h2>
@@ -192,7 +162,6 @@
                     <p style="margin-top:12px;">Don't have an account? <a href="#" id="show-register-link">Register</a></p>
                 </div>
 
-                <!-- Register Form -->
                 <div id="register-form-container" style="display:none;">
                     <i class="fas fa-user-plus" style="font-size:3rem; color:#3B82F6;"></i>
                     <h2>Register</h2>
@@ -211,7 +180,6 @@
             </div>
         </div>
 
-        <!-- ======= STUDENT VIEW ======= -->
         <div id="view-student" style="display:none;">
             <div class="flex-between mb-4">
                 <h2><i class="fas fa-certificate" style="color:#3B82F6;"></i> My Certificates</h2>
@@ -220,7 +188,6 @@
             <div class="grid-3" id="student-grid"></div>
         </div>
 
-        <!-- ======= ADMIN VIEW ======= -->
         <div id="view-admin" style="display:none;">
             <div class="flex-between mb-4">
                 <h2><i class="fas fa-shield-alt" style="color:#3B82F6;"></i> Admin Panel</h2>
@@ -243,7 +210,6 @@
             </div>
         </div>
 
-        <!-- ======= DASHBOARD VIEW ======= -->
         <div id="view-dashboard" style="display:none;">
             <div class="flex-between mb-4">
                 <h2><i class="fas fa-chart-bar" style="color:#3B82F6;"></i> Dashboard</h2>
@@ -283,25 +249,19 @@
             </div>
         </div>
 
-        <!-- ======= VERIFY VIEW ======= -->
         <div id="view-verify" style="display:none;">
             <div class="verify-box">
                 <i class="fas fa-qrcode" style="font-size:3rem; color:#3B82F6;"></i>
                 <h2>Verify Certificate</h2>
-                <p class="text-muted">Enter certificate number or scan QR code</p>
+                <p class="text-muted">Enter certificate number</p>
                 <div class="input-group">
                     <input type="text" id="verify-input" placeholder="e.g. USH-2026-FD-000001" />
                     <button class="btn btn-primary" id="verify-btn"><i class="fas fa-search"></i> Verify</button>
-                </div>
-                <div style="margin-top:20px; border-top:1px solid #E2E8F0; padding-top:20px;">
-                    <button class="btn btn-outline" id="qr-scan-btn"><i class="fas fa-camera"></i> Scan QR Code</button>
-                    <div id="qr-reader" style="margin-top:12px; max-width:300px; margin-left:auto; margin-right:auto; display:none;"></div>
                 </div>
                 <div id="verify-result" style="margin-top:16px;"></div>
             </div>
         </div>
 
-        <!-- ======= GENERATE MODAL ======= -->
         <div class="modal-overlay" id="generate-modal">
             <div class="modal">
                 <button class="close" id="modal-close">&times;</button>
@@ -318,7 +278,6 @@
             </div>
         </div>
 
-        <!-- ======= DETAILS MODAL ======= -->
         <div class="modal-overlay" id="details-modal">
             <div class="modal">
                 <button class="close" id="details-close">&times;</button>
@@ -327,7 +286,6 @@
             </div>
         </div>
 
-        <!-- ======= FOOTER ======= -->
         <footer style="margin-top:40px; padding:24px 0; border-top:1px solid #E2E8F0; text-align:center;">
             <div style="max-width:600px; margin:0 auto;">
                 <div style="font-weight:600; color:#0F172A;">Up Skills Hub</div>
@@ -339,1498 +297,353 @@
 
     </div>
 
-   <script>
-
-// ============================================================
-// UP SKILLS CERTIFICATE SYSTEM
-// PART 1
-// ============================================================
-
-// ============================================================
-// API CONFIGURATION
-// ============================================================
-
-// ✅ IMPORTANT FOR VERCEL
-// Do NOT use localhost here.
-// /api automatically uses your deployed Vercel domain.
-
-const API_BASE = '/api';
-const API_AUTH = '/api/auth';
-
-
-// ============================================================
-// AUTHENTICATION
-// ============================================================
-
-const token = localStorage.getItem('token');
-const user = JSON.parse(
-    localStorage.getItem('user') || 'null'
-);
-
-
-// ============================================================
-// SHOW APPLICATION
-// ============================================================
-
-function showApp() {
-
-    document.getElementById('view-auth').style.display = 'none';
-    document.getElementById('view-student').style.display = 'block';
-
-    const adminBtn =
-        document.querySelector('[data-view="admin"]');
-
-    const dashboardBtn =
-        document.querySelector('[data-view="dashboard"]');
-
-    if (user && user.role === 'admin') {
-
-        if (adminBtn) {
-            adminBtn.style.display = 'inline-block';
-        }
-
-        if (dashboardBtn) {
-            dashboardBtn.style.display = 'inline-block';
-        }
-
-    } else {
-
-        if (adminBtn) {
-            adminBtn.style.display = 'none';
-        }
-
-        if (dashboardBtn) {
-            dashboardBtn.style.display = 'none';
-        }
-    }
-
-    loadStudentCerts();
-}
-
-
-// ============================================================
-// SHOW LOGIN
-// ============================================================
-
-function showLogin() {
-
-    document.getElementById('view-auth').style.display = 'block';
-    document.getElementById('view-student').style.display = 'none';
-    document.getElementById('view-admin').style.display = 'none';
-    document.getElementById('view-dashboard').style.display = 'none';
-    document.getElementById('view-verify').style.display = 'none';
-}
-
-
-// ============================================================
-// CHECK LOGIN
-// ============================================================
-
-if (token && user) {
-    showApp();
-} else {
-    showLogin();
-}
-
-
-// ============================================================
-// LOGIN / REGISTER SWITCH
-// ============================================================
-
-const registerLink =
-    document.getElementById('show-register-link');
-
-const loginLink =
-    document.getElementById('show-login-link');
-
-
-if (registerLink) {
-
-    registerLink.addEventListener('click', (e) => {
-
-        e.preventDefault();
-
-        document.getElementById(
-            'login-form-container'
-        ).style.display = 'none';
-
-        document.getElementById(
-            'register-form-container'
-        ).style.display = 'block';
-
-    });
-}
-
-
-if (loginLink) {
-
-    loginLink.addEventListener('click', (e) => {
-
-        e.preventDefault();
-
-        document.getElementById(
-            'register-form-container'
-        ).style.display = 'none';
-
-        document.getElementById(
-            'login-form-container'
-        ).style.display = 'block';
-
-    });
-}
-
-
-// ============================================================
-// LOGIN
-// ============================================================
-
-const loginForm =
-    document.getElementById('login-form');
-
-
-if (loginForm) {
-
-    loginForm.addEventListener('submit', async (e) => {
-
-        e.preventDefault();
-
-        const email =
-            document.getElementById('login-email')
-            .value
-            .trim();
-
-        const password =
-            document.getElementById('login-password')
-            .value;
-
-
-        try {
-
-            const res = await fetch(
-                `${API_AUTH}/login`,
-                {
-                    method: 'POST',
-
-                    headers: {
-                        'Content-Type':
-                            'application/json'
-                    },
-
-                    body: JSON.stringify({
-                        email,
-                        password
-                    })
-                }
-            );
-
-
-            const data = await res.json();
-
-
-            if (!res.ok) {
-
-                throw new Error(
-                    data.error ||
-                    data.message ||
-                    'Login failed'
-                );
+    <script>
+        const API_BASE = '/api';
+        const API_AUTH = '/api/auth';
+
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+        function showApp() {
+            document.getElementById('view-auth').style.display = 'none';
+            document.getElementById('view-student').style.display = 'block';
+            const adminBtn = document.querySelector('[data-view="admin"]');
+            const dashboardBtn = document.querySelector('[data-view="dashboard"]');
+            if (user && user.role === 'admin') {
+                if (adminBtn) adminBtn.style.display = 'inline-block';
+                if (dashboardBtn) dashboardBtn.style.display = 'inline-block';
+            } else {
+                if (adminBtn) adminBtn.style.display = 'none';
+                if (dashboardBtn) dashboardBtn.style.display = 'none';
             }
-
-
-            localStorage.setItem(
-                'token',
-                data.token
-            );
-
-            localStorage.setItem(
-                'user',
-                JSON.stringify(data.user)
-            );
-
-
-            alert('✅ Login successful!');
-
-            location.reload();
-
-
-        } catch (err) {
-
-            console.error(
-                'Login error:',
-                err
-            );
-
-            alert(
-                '❌ Login failed: ' +
-                err.message
-            );
-
-        }
-
-    });
-
-}
-
-
-// ============================================================
-// REGISTER
-// ============================================================
-
-const registerForm =
-    document.getElementById('register-form');
-
-
-if (registerForm) {
-
-    registerForm.addEventListener(
-        'submit',
-        async (e) => {
-
-            e.preventDefault();
-
-            const username =
-                document.getElementById('reg-username')
-                .value
-                .trim();
-
-            const email =
-                document.getElementById('reg-email')
-                .value
-                .trim();
-
-            const password =
-                document.getElementById('reg-password')
-                .value;
-
-            const role =
-                document.getElementById('reg-role')
-                .value;
-
-
-            try {
-
-                const res = await fetch(
-                    `${API_AUTH}/register`,
-                    {
-                        method: 'POST',
-
-                        headers: {
-                            'Content-Type':
-                                'application/json'
-                        },
-
-                        body: JSON.stringify({
-                            username,
-                            email,
-                            password,
-                            role
-                        })
-                    }
-                );
-
-
-                const data =
-                    await res.json();
-
-
-                if (!res.ok) {
-
-                    throw new Error(
-                        data.error ||
-                        data.message ||
-                        'Registration failed'
-                    );
-                }
-
-
-                alert(
-                    '✅ Registration successful! Please login.'
-                );
-
-
-                document.getElementById(
-                    'register-form-container'
-                ).style.display = 'none';
-
-
-                document.getElementById(
-                    'login-form-container'
-                ).style.display = 'block';
-
-
-            } catch (err) {
-
-                console.error(
-                    'Registration error:',
-                    err
-                );
-
-                alert(
-                    '❌ Registration failed: ' +
-                    err.message
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-// ============================================================
-// LOGOUT
-// ============================================================
-
-function logout() {
-
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-
-    location.reload();
-}
-
-
-// ============================================================
-// LOGOUT BUTTON
-// ============================================================
-
-const nav =
-    document.querySelector('nav div:last-child');
-
-
-if (nav) {
-
-    const logoutBtn =
-        document.createElement('button');
-
-    logoutBtn.innerHTML =
-        '<i class="fas fa-sign-out-alt"></i> Logout';
-
-    logoutBtn.style.color = '#EF4444';
-
-    logoutBtn.onclick = logout;
-
-    nav.appendChild(logoutBtn);
-}
-
-
-// ============================================================
-// DOM REFERENCES
-// ============================================================
-
-const studentGrid =
-    document.getElementById('student-grid');
-
-const certCount =
-    document.getElementById('cert-count');
-
-const adminBody =
-    document.getElementById('admin-table-body');
-
-const adminSearch =
-    document.getElementById('admin-search');
-
-const adminStatus =
-    document.getElementById('admin-status-filter');
-
-const verifyInput =
-    document.getElementById('verify-input');
-
-const verifyBtn =
-    document.getElementById('verify-btn');
-
-const verifyResult =
-    document.getElementById('verify-result');
-
-const genModal =
-    document.getElementById('generate-modal');
-
-const genForm =
-    document.getElementById('generate-form');
-
-const detailsModal =
-    document.getElementById('details-modal');
-
-
-// ============================================================
-// NAVIGATION
-// ============================================================
-
-document.querySelectorAll('nav button')
-.forEach(btn => {
-
-    btn.addEventListener('click', () => {
-
-        document
-            .querySelectorAll('nav button')
-            .forEach(b =>
-                b.classList.remove('active')
-            );
-
-
-        btn.classList.add('active');
-
-
-        const view =
-            btn.dataset.view;
-
-
-        document.getElementById(
-            'view-student'
-        ).style.display =
-            view === 'student'
-                ? 'block'
-                : 'none';
-
-
-        document.getElementById(
-            'view-admin'
-        ).style.display =
-            view === 'admin'
-                ? 'block'
-                : 'none';
-
-
-        document.getElementById(
-            'view-dashboard'
-        ).style.display =
-            view === 'dashboard'
-                ? 'block'
-                : 'none';
-
-
-        document.getElementById(
-            'view-verify'
-        ).style.display =
-            view === 'verify'
-                ? 'block'
-                : 'none';
-
-
-        if (view === 'student') {
             loadStudentCerts();
         }
 
-
-        if (view === 'admin') {
-            loadAdminCerts();
+        function showLogin() {
+            document.getElementById('view-auth').style.display = 'block';
+            document.getElementById('view-student').style.display = 'none';
+            document.getElementById('view-admin').style.display = 'none';
+            document.getElementById('view-dashboard').style.display = 'none';
+            document.getElementById('view-verify').style.display = 'none';
         }
 
-
-        if (view === 'dashboard') {
-            loadDashboard();
+        if (token && user) {
+            showApp();
+        } else {
+            showLogin();
         }
 
-    });
-
-});
-
-
-// ============================================================
-// LOAD STUDENT CERTIFICATES
-// ============================================================
-
-async function loadStudentCerts() {
-
-    try {
-
-        const res =
-            await fetch(
-                `${API_BASE}/certificates`
-            );
-
-
-        const data =
-            await res.json();
-
-
-        if (!res.ok || !data.success) {
-
-            throw new Error(
-                data.error ||
-                data.message ||
-                'Failed to load certificates'
-            );
-
-        }
-
-
-        const certs =
-            data.certificates || [];
-
-
-        if (certCount) {
-
-            certCount.textContent =
-                `${certs.length} certificates`;
-
-        }
-
-
-        if (!studentGrid) return;
-
-
-        if (certs.length === 0) {
-
-            studentGrid.innerHTML = `
-
-                <div
-                    class="text-muted text-center"
-                    style="padding:40px;"
-                >
-
-                    <i
-                        class="fas fa-certificate"
-                        style="
-                            font-size:2rem;
-                            display:block;
-                            margin-bottom:12px;
-                        "
-                    ></i>
-
-                    No certificates found
-
-                </div>
-
-            `;
-
-            return;
-        }
-
-
-        studentGrid.innerHTML =
-            certs.map(c => `
-
-                <div class="card">
-
-                    <div
-                        class="flex"
-                        style="
-                            justify-content:space-between;
-                        "
-                    >
-
-                        <span
-                            class="badge badge-${
-                                c.status || 'pending'
-                            }"
-                        >
-                            ${c.status || 'pending'}
-                        </span>
-
-
-                        <span
-                            class="text-muted"
-                            style="
-                                font-size:0.75rem;
-                            "
-                        >
-                            ${
-                                c.certificateNumber ||
-                                'N/A'
-                            }
-                        </span>
-
-                    </div>
-
-
-                    <div style="margin-top:8px;">
-
-                        <div
-                            style="
-                                font-weight:600;
-                                font-size:1.1rem;
-                            "
-                        >
-                            ${
-                                c.studentName ||
-                                'Unknown'
-                            }
-                        </div>
-
-
-                        <div class="text-muted">
-                            ${
-                                c.courseName ||
-                                'Unknown'
-                            }
-                        </div>
-
-
-                        <div
-                            class="text-muted"
-                            style="
-                                font-size:0.8rem;
-                            "
-                        >
-                            Issued:
-                            ${
-                                c.issueDate
-                                ? new Date(
-                                    c.issueDate
-                                  ).toLocaleDateString()
-                                : 'N/A'
-                            }
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="flex"
-                        style="
-                            margin-top:12px;
-                            gap:6px;
-                            flex-wrap:wrap;
-                        "
-                    >
-
-                        <button
-                            class="btn btn-outline btn-sm"
-                            onclick="
-                                downloadCert('${c._id}')
-                            "
-                        >
-                            <i class="fas fa-download"></i>
-                            PDF
-                        </button>
-
-
-                        <button
-                            class="btn btn-outline btn-sm"
-                            onclick="
-                                showDetails('${c._id}')
-                            "
-                        >
-                            <i class="fas fa-eye"></i>
-                            Details
-                        </button>
-
-
-                        <button
-                            class="btn btn-outline btn-sm"
-                            onclick="
-                                verifyCert(
-                                    '${c.certificateNumber}'
-                                )
-                            "
-                        >
-                            <i class="fas fa-check"></i>
-                            Verify
-                        </button>
-
-
-                        <button
-                            class="btn btn-outline btn-sm"
-                            onclick="
-                                shareCert(
-                                    '${c.certificateNumber}'
-                                )
-                            "
-                        >
-                            <i class="fas fa-share"></i>
-                            Share
-                        </button>
-
-
-                        <button
-                            class="btn btn-outline btn-sm"
-                            onclick="
-                                sendEmail('${c._id}')
-                            "
-                        >
-                            <i class="fas fa-envelope"></i>
-                            Email
-                        </button>
-
-                    </div>
-
-                </div>
-
-            `).join('');
-
-
-    } catch (err) {
-
-        console.error(
-            'Certificate loading error:',
-            err
-        );
-
-
-        if (studentGrid) {
-
-            studentGrid.innerHTML = `
-
-                <div
-                    class="text-center"
-                    style="
-                        padding:40px;
-                        color:#ef4444;
-                    "
-                >
-
-                    ❌ Failed to load:
-                    ${err.message}
-
-                </div>
-
-            `;
-
-        }
-
-    }
-
-}
-
-
-// ---------- Download PDF ----------
-async function downloadCert(id) {
-    try {
-        const res = await fetch(`${API_BASE}/certificates/${id}/download`, {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+        document.getElementById('show-register-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('login-form-container').style.display = 'none';
+            document.getElementById('register-form-container').style.display = 'block';
+        });
+
+        document.getElementById('show-login-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('register-form-container').style.display = 'none';
+            document.getElementById('login-form-container').style.display = 'block';
+        });
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            try {
+                const res = await fetch(`${API_AUTH}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                alert('✅ Login successful!');
+                location.reload();
+            } catch (err) {
+                alert('❌ Login failed: ' + err.message);
             }
         });
 
-        if (!res.ok) {
-            let errorMessage = 'Download failed';
-
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('reg-username').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const role = document.getElementById('reg-role').value;
             try {
-                const err = await res.json();
-                errorMessage = err.error || errorMessage;
-            } catch (_) {}
-
-            throw new Error(errorMessage);
-        }
-
-        const blob = await res.blob();
-        const url = window.URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'certificate.pdf';
-
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-
-        window.URL.revokeObjectURL(url);
-
-    } catch (err) {
-        alert('❌ Download error: ' + err.message);
-    }
-}
-
-
-// ---------- Show Certificate Details ----------
-async function showDetails(id) {
-    try {
-        const res = await fetch(`${API_BASE}/certificates`);
-
-        if (!res.ok) {
-            throw new Error('Could not load certificates');
-        }
-
-        const data = await res.json();
-
-        const cert = (data.certificates || []).find(
-            c => c._id === id
-        );
-
-        if (!cert) {
-            alert('❌ Certificate not found');
-            return;
-        }
-
-        document.getElementById('details-title').textContent =
-            `Certificate: ${cert.certificateNumber || 'N/A'}`;
-
-        document.getElementById('details-body').innerHTML = `
-            <div class="row">
-                <span class="label">Student</span>
-                <span class="value">
-                    ${cert.studentName || 'Unknown'}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">Course</span>
-                <span class="value">
-                    ${cert.courseName || 'Unknown'}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">Course Code</span>
-                <span class="value">
-                    ${cert.courseCode || 'N/A'}
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">Certificate Number</span>
-                <span class="value">
-                    <code>${cert.certificateNumber || 'N/A'}</code>
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">Issue Date</span>
-                <span class="value">
-                    ${
-                        cert.issueDate
-                            ? new Date(cert.issueDate).toLocaleDateString()
-                            : 'N/A'
-                    }
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">Status</span>
-                <span class="value">
-                    <span class="badge badge-${cert.status || 'pending'}">
-                        ${cert.status || 'pending'}
-                    </span>
-                </span>
-            </div>
-
-            <div style="
-                margin-top:20px;
-                text-align:center;
-                background:#f8fafc;
-                padding:20px;
-                border-radius:12px;
-            ">
-                <i class="fas fa-certificate"
-                   style="font-size:55px;"></i>
-
-                <p style="margin-top:10px;">
-                    Certificate Verification
-                </p>
-            </div>
-
-            <button
-                class="btn btn-primary"
-                style="width:100%; margin-top:15px;"
-                onclick="downloadCert('${cert._id}')">
-
-                <i class="fas fa-download"></i>
-                Download PDF
-            </button>
-        `;
-
-        detailsModal.classList.add('active');
-
-    } catch (err) {
-        alert('❌ Error loading certificate details: ' + err.message);
-    }
-}
-
-
-// ---------- Revoke Certificate ----------
-async function revokeCert(id) {
-
-    if (!confirm(
-        'Are you sure you want to revoke this certificate?'
-    )) {
-        return;
-    }
-
-    try {
-
-        const res = await fetch(
-            `${API_BASE}/certificates/${id}`,
-            {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization':
-                        `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({
-                    status: 'revoked'
-                })
+                const res = await fetch(`${API_AUTH}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password, role })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                alert('✅ Registration successful! Please login.');
+                document.getElementById('register-form-container').style.display = 'none';
+                document.getElementById('login-form-container').style.display = 'block';
+            } catch (err) {
+                alert('❌ Registration failed: ' + err.message);
             }
-        );
+        });
 
-        const data = await res.json();
-
-        if (!res.ok) {
-            throw new Error(
-                data.error || 'Revoke failed'
-            );
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            location.reload();
         }
 
-        alert('✅ Certificate revoked successfully');
-
-        loadAdminCerts();
-        loadStudentCerts();
-
-    } catch (err) {
-
-        alert(
-            '❌ Revoke error: ' +
-            err.message
-        );
-    }
-}
-
-
-// ---------- Edit Certificate ----------
-async function editCert(id) {
-
-    try {
-
-        const res = await fetch(
-            `${API_BASE}/certificates`
-        );
-
-        const data = await res.json();
-
-        const cert = (data.certificates || []).find(
-            c => c._id === id
-        );
-
-        if (!cert) {
-            alert('❌ Certificate not found');
-            return;
+        const navRight = document.querySelector('nav div:last-child');
+        if (navRight) {
+            const logoutBtn = document.createElement('button');
+            logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+            logoutBtn.style.color = '#EF4444';
+            logoutBtn.onclick = logout;
+            navRight.appendChild(logoutBtn);
         }
 
-        const studentName = prompt(
-            'Student name:',
-            cert.studentName || ''
-        );
-
-        if (studentName === null) return;
-
-        const courseName = prompt(
-            'Course name:',
-            cert.courseName || ''
-        );
-
-        if (courseName === null) return;
-
-        const courseCode = prompt(
-            'Course code:',
-            cert.courseCode || ''
-        );
-
-        if (courseCode === null) return;
-
-        const status = prompt(
-            'Status (valid/pending/revoked):',
-            cert.status || 'valid'
-        );
-
-        if (status === null) return;
-
-        const updateRes = await fetch(
-            `${API_BASE}/certificates/${id}`,
-            {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization':
-                        `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({
-                    studentName: studentName.trim(),
-                    courseName: courseName.trim(),
-                    courseCode: courseCode.trim().toUpperCase(),
-                    status: status.trim().toLowerCase()
-                })
-            }
-        );
-
-        const updateData = await updateRes.json();
-
-        if (!updateRes.ok) {
-            throw new Error(
-                updateData.error || 'Update failed'
-            );
-        }
-
-        alert('✅ Certificate updated successfully');
-
-        loadAdminCerts();
-        loadStudentCerts();
-
-    } catch (err) {
-
-        alert(
-            '❌ Update error: ' +
-            err.message
-        );
-    }
-}
-
-
-// ---------- Verify Certificate ----------
-async function verifyCert(certificateNumber) {
-
-    try {
-
-        const number = String(
-            certificateNumber || ''
-        ).trim();
-
-        if (!number) {
-            alert('Please enter a certificate number');
-            return;
-        }
-
-        const res = await fetch(
-            `${API_BASE}/certificates/verify/${encodeURIComponent(number)}`
-        );
-
-        const data = await res.json();
-
-        if (!res.ok || !data.success) {
-
-            verifyResult.innerHTML = `
-                <div class="card"
-                     style="
-                        border-left:4px solid #ef4444;
-                        margin-top:15px;
-                     ">
-
-                    <h3 style="color:#ef4444;">
-                        ❌ Certificate Not Found
-                    </h3>
-
-                    <p>
-                        Certificate number:
-                        <strong>${number}</strong>
-                    </p>
-
-                    <p>
-                        This certificate could not be verified.
-                    </p>
-
-                </div>
-            `;
-
-            return;
-        }
-
-        const cert =
-            data.certificate || data.data || data;
-
-        verifyResult.innerHTML = `
-            <div class="card"
-                 style="
-                    border-left:4px solid #22c55e;
-                    margin-top:15px;
-                 ">
-
-                <h3 style="color:#16a34a;">
-                    ✅ Certificate Verified
-                </h3>
-
-                <div style="margin-top:15px;">
-
-                    <p>
-                        <strong>Certificate Number:</strong>
-                        ${cert.certificateNumber || number}
-                    </p>
-
-                    <p>
-                        <strong>Student:</strong>
-                        ${cert.studentName || 'Unknown'}
-                    </p>
-
-                    <p>
-                        <strong>Course:</strong>
-                        ${cert.courseName || 'Unknown'}
-                    </p>
-
-                    <p>
-                        <strong>Course Code:</strong>
-                        ${cert.courseCode || 'N/A'}
-                    </p>
-
-                    <p>
-                        <strong>Status:</strong>
-                        <span class="badge badge-${cert.status || 'valid'}">
-                            ${cert.status || 'valid'}
-                        </span>
-                    </p>
-
-                    <p>
-                        <strong>Issue Date:</strong>
-                        ${
-                            cert.issueDate
-                                ? new Date(
-                                    cert.issueDate
-                                  ).toLocaleDateString()
-                                : 'N/A'
-                        }
-                    </p>
-
-                </div>
-
-            </div>
-        `;
-
-    } catch (err) {
-
-        verifyResult.innerHTML = `
-            <div class="card"
-                 style="
-                    border-left:4px solid #ef4444;
-                    margin-top:15px;
-                 ">
-
-                <h3 style="color:#ef4444;">
-                    ❌ Verification Error
-                </h3>
-
-                <p>
-                    ${err.message}
-                </p>
-
-            </div>
-        `;
-    }
-}
-
-
-// ---------- Verify Button ----------
-if (verifyBtn) {
-
-    verifyBtn.addEventListener(
-        'click',
-        () => {
-
-            const number =
-                verifyInput.value.trim();
-
-            if (!number) {
-                alert(
-                    'Please enter a certificate number'
-                );
-                return;
-            }
-
-            verifyCert(number);
-        }
-    );
-}
-
-
-// ---------- Enter Key for Verification ----------
-if (verifyInput) {
-
-    verifyInput.addEventListener(
-        'keydown',
-        (e) => {
-
-            if (e.key === 'Enter') {
-
-                e.preventDefault();
-
-                if (verifyBtn) {
-                    verifyBtn.click();
-                }
-            }
-        }
-    );
-}
-
-
-// ---------- Share Certificate ----------
-async function shareCert(certificateNumber) {
-
-    const number =
-        String(certificateNumber || '').trim();
-
-    if (!number) {
-        alert('Certificate number is missing');
-        return;
-    }
-
-    /*
-      Public verification link.
-
-      IMPORTANT:
-      Change this only if your frontend has
-      another production URL.
-    */
-
-    const verifyLink =
-        `${window.location.origin}/?verify=${encodeURIComponent(number)}`;
-
-    const shareText =
-        `🎓 Certificate Verification\n\n` +
-        `Certificate Number: ${number}\n\n` +
-        `Verify certificate here:\n${verifyLink}`;
-
-    try {
-
-        if (navigator.share) {
-
-            await navigator.share({
-                title: 'Certificate Verification',
-                text: shareText,
-                url: verifyLink
+        const studentGrid = document.getElementById('student-grid');
+        const certCount = document.getElementById('cert-count');
+        const adminBody = document.getElementById('admin-table-body');
+        const adminSearch = document.getElementById('admin-search');
+        const adminStatus = document.getElementById('admin-status-filter');
+        const verifyInput = document.getElementById('verify-input');
+        const verifyBtn = document.getElementById('verify-btn');
+        const verifyResult = document.getElementById('verify-result');
+
+        const genModal = document.getElementById('generate-modal');
+        const genForm = document.getElementById('generate-form');
+        const detailsModal = document.getElementById('details-modal');
+
+        document.querySelectorAll('nav button[data-view]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('nav button[data-view]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const view = btn.dataset.view;
+                document.getElementById('view-student').style.display = view === 'student' ? 'block' : 'none';
+                document.getElementById('view-admin').style.display = view === 'admin' ? 'block' : 'none';
+                document.getElementById('view-dashboard').style.display = view === 'dashboard' ? 'block' : 'none';
+                document.getElementById('view-verify').style.display = view === 'verify' ? 'block' : 'none';
+                if (view === 'student') loadStudentCerts();
+                if (view === 'admin') loadAdminCerts();
+                if (view === 'dashboard') loadDashboard();
             });
+        });
 
-        } else {
-
-            await navigator.clipboard.writeText(
-                shareText
-            );
-
-            alert(
-                '✅ Certificate sharing information copied!'
-            );
-        }
-
-    } catch (err) {
-
-        if (err.name !== 'AbortError') {
-
+        async function loadStudentCerts() {
             try {
-
-                await navigator.clipboard.writeText(
-                    shareText
-                );
-
-                alert(
-                    '✅ Certificate link copied!'
-                );
-
-            } catch (_) {
-
-                prompt(
-                    'Copy this certificate verification link:',
-                    verifyLink
-                );
-            }
-        }
-    }
-}
-
-
-// ---------- Send Certificate by Email ----------
-async function sendEmail(id) {
-
-    const email =
-        prompt(
-            'Enter recipient email address:'
-        );
-
-    if (!email) {
-        return;
-    }
-
-    if (!email.includes('@')) {
-
-        alert(
-            '❌ Please enter a valid email address.'
-        );
-
-        return;
-    }
-
-    try {
-
-        const res = await fetch(
-            `${API_BASE}/certificates/${id}/email`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization':
-                        `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({
-                    email: email.trim()
-                })
-            }
-        );
-
-        const data = await res.json();
-
-        if (!res.ok) {
-
-            throw new Error(
-                data.error ||
-                'Email sending failed'
-            );
-        }
-
-        alert(
-            '✅ Certificate sent successfully!'
-        );
-
-    } catch (err) {
-
-        alert(
-            '❌ Email error: ' +
-            err.message
-        );
-    }
-}
-
-
-// ---------- Search Admin Certificates ----------
-if (adminSearch) {
-
-    adminSearch.addEventListener(
-        'input',
-        () => {
-            loadAdminCerts();
-        }
-    );
-}
-
-
-// ---------- Filter Admin Certificates ----------
-if (adminStatus) {
-
-    adminStatus.addEventListener(
-        'change',
-        () => {
-            loadAdminCerts();
-        }
-    );
-}
-
-
-// ---------- Close Modals ----------
-document.querySelectorAll(
-    '.modal-close, .close-modal, [data-close]'
-).forEach(btn => {
-
-    btn.addEventListener(
-        'click',
-        () => {
-
-            const modal =
-                btn.closest('.modal');
-
-            if (modal) {
-                modal.classList.remove('active');
-            }
-        }
-    );
-});
-
-
-// ---------- Close Modal When Clicking Outside ----------
-document.querySelectorAll('.modal').forEach(modal => {
-
-    modal.addEventListener(
-        'click',
-        (e) => {
-
-            if (e.target === modal) {
-                modal.classList.remove('active');
-            }
-        }
-    );
-});
-
-
-// ============================================================
-// AUTO VERIFY FROM URL
-// Example:
-// https://certificate-system-nu.vercel.app/?verify=CERT-123
-// ============================================================
-
-(function autoVerifyFromURL() {
-
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
-    const number =
-        params.get('verify');
-
-    if (!number) {
-        return;
-    }
-
-    setTimeout(() => {
-
-        if (verifyInput) {
-
-            verifyInput.value =
-                number;
-
-            if (verifyBtn) {
-                verifyBtn.click();
+                const res = await fetch(`${API_BASE}/certificates`);
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error);
+                const certs = data.certificates || [];
+                certCount.textContent = `${certs.length} certificates`;
+                if (certs.length === 0) {
+                    studentGrid.innerHTML = `<div class="text-muted text-center" style="padding:40px;"><i class="fas fa-certificate" style="font-size:2rem;display:block;margin-bottom:12px;"></i> No certificates found</div>`;
+                    return;
+                }
+                studentGrid.innerHTML = certs.map(c => `
+                    <div class="card">
+                        <div class="flex" style="justify-content:space-between;">
+                            <span class="badge badge-${c.status || 'pending'}">${c.status || 'pending'}</span>
+                            <span class="text-muted" style="font-size:0.75rem;">${c.certificateNumber || 'N/A'}</span>
+                        </div>
+                        <div style="margin-top:8px;">
+                            <div style="font-weight:600; font-size:1.1rem;">${c.studentName || 'Unknown'}</div>
+                            <div class="text-muted">${c.courseName || 'Unknown'}</div>
+                            <div class="text-muted" style="font-size:0.8rem;">Issued: ${c.issueDate ? new Date(c.issueDate).toLocaleDateString() : 'N/A'}</div>
+                        </div>
+                        <div class="flex" style="margin-top:12px; gap:6px; flex-wrap:wrap;">
+                            <button class="btn btn-outline btn-sm" onclick="showDetails('${c._id}')"><i class="fas fa-eye"></i> Details</button>
+                            <button class="btn btn-outline btn-sm" onclick="verifyCertByNumber('${c.certificateNumber}')"><i class="fas fa-check"></i> Verify</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                studentGrid.innerHTML = `<div class="text-muted text-center" style="padding:40px;color:#ef4444;">❌ Failed to load: ${err.message}</div>`;
             }
         }
 
-        const verifyNav =
-            document.querySelector(
-                '[data-view="verify"]'
-            );
-
-        if (verifyNav) {
-            verifyNav.click();
+        async function loadAdminCerts() {
+            try {
+                const res = await fetch(`${API_BASE}/certificates`);
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error);
+                let certs = data.certificates || [];
+                const search = adminSearch.value.toLowerCase();
+                const statusFilter = adminStatus.value;
+                if (search) {
+                    certs = certs.filter(c =>
+                        (c.studentName || '').toLowerCase().includes(search) ||
+                        (c.courseName || '').toLowerCase().includes(search) ||
+                        (c.certificateNumber || '').toLowerCase().includes(search)
+                    );
+                }
+                if (statusFilter) {
+                    certs = certs.filter(c => c.status === statusFilter);
+                }
+                adminBody.innerHTML = certs.map((c, i) => `
+                    <tr>
+                        <td>${i+1}</td>
+                        <td><code>${c.certificateNumber || 'N/A'}</code></td>
+                        <td>${c.studentName || 'Unknown'}</td>
+                        <td>${c.courseName || 'Unknown'}</td>
+                        <td><span class="badge badge-${c.status || 'pending'}">${c.status || 'pending'}</span></td>
+                        <td>
+                            <div class="flex" style="gap:4px;">
+                                <button class="btn btn-outline btn-sm" onclick="showDetails('${c._id}')"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-red btn-sm" onclick="revokeCert('${c._id}')"><i class="fas fa-ban"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+                if (certs.length === 0) adminBody.innerHTML = `<tr><td colspan="6" class="text-muted text-center">No certificates match</td></tr>`;
+            } catch (err) {
+                adminBody.innerHTML = `<tr><td colspan="6" class="text-muted text-center">Error loading: ${err.message}</td></tr>`;
+            }
         }
 
-    }, 500);
+        async function loadDashboard() {
+            try {
+                const res = await fetch(`${API_BASE}/dashboard`);
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error);
+                const d = data.data || {};
+                document.getElementById('dash-total').textContent = d.total || 0;
+                document.getElementById('dash-valid').textContent = d.valid || 0;
+                document.getElementById('dash-revoked').textContent = d.revoked || 0;
+                document.getElementById('dash-pending').textContent = d.pending || 0;
+                document.getElementById('dash-daily').innerHTML = (d.dailyData || []).map(day => `
+                    <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f1f5f9;">
+                        <span>${day.date || 'N/A'}</span>
+                        <span style="font-weight:600;">${day.count || 0} certificates</span>
+                    </div>
+                `).join('') || '<p class="text-muted">No data available</p>';
+                document.getElementById('dash-courses').innerHTML = (d.topCourses || []).map(course => `
+                    <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f1f5f9;">
+                        <span>${course.name || 'Unknown'}</span>
+                        <span style="font-weight:600;">${course.count || 0} certs</span>
+                    </div>
+                `).join('') || '<p class="text-muted">No courses yet</p>';
+                document.getElementById('dash-recent').innerHTML = (d.recent || []).map(activity => `
+                    <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f1f5f9;">
+                        <span><strong>${activity.studentName || 'Unknown'}</strong> - ${activity.certificateNumber || 'N/A'}</span>
+                        <span>
+                            <span class="badge badge-${activity.status || 'pending'}">${activity.status || 'pending'}</span>
+                        </span>
+                    </div>
+                `).join('') || '<p class="text-muted">No recent activity</p>';
+                document.getElementById('dashboard-update').textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+            } catch (err) {
+                document.getElementById('dash-daily').innerHTML = `<p class="text-muted" style="color:#ef4444;">❌ Failed to load: ${err.message}</p>`;
+            }
+        }
 
-})();
+        if (genForm) {
+            genForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const studentName = document.getElementById('gen-name').value.trim();
+                const courseName = document.getElementById('gen-course').value.trim();
+                const courseCode = document.getElementById('gen-code').value.trim().toUpperCase();
+                if (!studentName || !courseName || !courseCode) return alert('Please fill all fields');
+                try {
+                    const res = await fetch(`${API_BASE}/certificates`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({ studentName, courseName, courseCode })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error || 'Generation failed');
+                    alert(`✅ Certificate ${data.certificate.certificateNumber} generated!`);
+                    genModal.classList.remove('active');
+                    genForm.reset();
+                    loadStudentCerts();
+                    loadAdminCerts();
+                } catch (err) {
+                    alert('❌ Error: ' + err.message);
+                }
+            });
+        }
 
+        const btnGenerate = document.getElementById('btn-generate');
+        if (btnGenerate) btnGenerate.addEventListener('click', () => genModal.classList.add('active'));
+        const modalClose = document.getElementById('modal-close');
+        if (modalClose) modalClose.addEventListener('click', () => genModal.classList.remove('active'));
+        const detailsClose = document.getElementById('details-close');
+        if (detailsClose) detailsClose.addEventListener('click', () => detailsModal.classList.remove('active'));
 
-// ============================================================
-// CHECK API CONNECTION
-// ============================================================
+        async function showDetails(id) {
+            try {
+                const res = await fetch(`${API_BASE}/certificates`);
+                const data = await res.json();
+                const cert = data.certificates.find(c => c._id === id);
+                if (!cert) return alert('Certificate not found');
+                document.getElementById('details-title').textContent = `Certificate: ${cert.certificateNumber}`;
+                document.getElementById('details-body').innerHTML = `
+                    <div class="row"><span class="label">Student</span><span class="value">${cert.studentName}</span></div>
+                    <div class="row"><span class="label">Course</span><span class="value">${cert.courseName}</span></div>
+                    <div class="row"><span class="label">Number</span><span class="value"><code>${cert.certificateNumber}</code></span></div>
+                    <div class="row"><span class="label">Status</span><span class="value"><span class="badge badge-${cert.status}">${cert.status}</span></span></div>
+                `;
+                detailsModal.classList.add('active');
+            } catch (err) {
+                alert('Error loading details');
+            }
+        }
 
-async function checkAPI() {
+        async function revokeCert(id) {
+            if (!confirm('Revoke this certificate?')) return;
+            try {
+                const res = await fetch(`${API_BASE}/certificates/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({ status: 'revoked' })
+                });
+                if (!res.ok) throw new Error('Revoke failed');
+                alert('✅ Certificate revoked');
+                loadAdminCerts();
+            } catch (err) {
+                alert('❌ ' + err.message);
+            }
+        }
 
-    try {
+        async function doVerify(number) {
+            if (!number) return;
+            try {
+                const res = await fetch(`${API_BASE}/verify/${encodeURIComponent(number)}`);
+                const data = await res.json();
+                if (!data.success) {
+                    verifyResult.innerHTML = `<div class="result-card" style="color:#ef4444;">❌ ${data.error || 'Certificate not found'}</div>`;
+                    return;
+                }
+                const cert = data.certificate;
+                verifyResult.innerHTML = `
+                    <div class="result-card">
+                        <div class="row"><span class="label">Student</span><span class="value">${cert.studentName}</span></div>
+                        <div class="row"><span class="label">Course</span><span class="value">${cert.courseName}</span></div>
+                        <div class="row"><span class="label">Status</span><span class="value"><span class="badge badge-${cert.status}">${cert.status}</span></span></div>
+                    </div>
+                `;
+            } catch (err) {
+                verifyResult.innerHTML = `<div class="result-card" style="color:#ef4444;">❌ ${err.message}</div>`;
+            }
+        }
 
-        const res =
-            await fetch(
-                `${API_BASE}/health`
-            );
+        if (verifyBtn) verifyBtn.addEventListener('click', () => doVerify(verifyInput.value.trim()));
+        function verifyCertByNumber(number) {
+            document.querySelector('[data-view="verify"]').click();
+            verifyInput.value = number;
+            doVerify(number);
+        }
 
-        const data =
-            await res.json();
-
-        console.log(
-            '✅ API Health:',
-            data
-        );
-
-        return true;
-
-    } catch (err) {
-
-        console.error(
-            '❌ API connection failed:',
-            err
-        );
-
-        return false;
-    }
-}
-
-
-// Run API check
-checkAPI();
-
-
-// ============================================================
-// FINAL MESSAGE
-// ============================================================
-
-console.log(
-    '🎓 Up Skills Certificate System loaded successfully'
-);
-
-console.log(
-    '🌐 API:',
-    API_BASE
-);
-
-</script>
+        if (adminSearch) adminSearch.addEventListener('input', loadAdminCerts);
+        if (adminStatus) adminStatus.addEventListener('change', loadAdminCerts);
+    </script>
+</body>
+</html>
