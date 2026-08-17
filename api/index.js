@@ -1,4 +1,3 @@
-// api/index.js
 module.exports = (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -11,12 +10,12 @@ module.exports = (req, res) => {
         return res.status(200).json({ status: 'ok', message: 'Server is running' });
     }
 
-    // Certificates
-    if (req.url === '/api/certificates') {
-        return res.status(200).json({ success: true, certificates: [] });
+    // Test
+    if (req.url === '/api/test') {
+        return res.status(200).json({ message: 'API is working!' });
     }
 
-    // ---- Mock Auth Routes ----
+    // --- Auth Routes (Mock) ---
     if (req.url === '/api/auth/register' && req.method === 'POST') {
         return res.status(201).json({
             message: 'User created successfully',
@@ -24,6 +23,7 @@ module.exports = (req, res) => {
             user: { id: '1', username: 'test', email: 'test@test.com', role: 'admin' }
         });
     }
+
     if (req.url === '/api/auth/login' && req.method === 'POST') {
         return res.status(200).json({
             message: 'Login successful',
@@ -32,5 +32,10 @@ module.exports = (req, res) => {
         });
     }
 
-    return res.status(404).json({ error: 'API not found' });
+    // Certificates
+    if (req.url === '/api/certificates') {
+        return res.status(200).json({ success: true, certificates: [] });
+    }
+
+    return res.status(404).json({ error: 'API endpoint not found' });
 };
